@@ -1,0 +1,10 @@
+test_slide.ipynb
+Librerías_de_optimización.ipynb
+# .gitignore
+.ipynb_checkpoints
+Session3.0*
+Session3_1*
+ejecoom*
+session4.*
+Session4.*
+*Zone.Identifier
