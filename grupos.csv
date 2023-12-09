@@ -1,0 +1,472 @@
+,tipo,grupo
+0,Leche,Alimentos Frescos
+1,Crema,Productos de Limpieza y Hogar
+2,Tortillas,Productos de Panadería y Cereal
+3,Aceite,Alimentos Secos y Enlatados
+4,Azúcar,Alimentos Secos y Enlatados
+5,Tocinetas,Alimentos Frescos
+6,Papas,Snacks y Golosinas
+7,Arroz,Alimentos Secos y Enlatados
+8,Mantequilla,Alimentos Frescos
+9,Margarina,Productos de Panadería y Cereal
+10,Huevos,'Alimentos Frescos'
+11,Detergente,Productos de Limpieza y Hogar
+12,Pan,Productos de Panadería y Cereal
+13,Panecillo,Productos de Panadería y Cereal
+14,Queso,Alimentos Frescos
+15,Papel,No aplica
+16,Atún,Alimentos Secos y Enlatados
+17,Planos,No aplica
+18,Integrales,Productos de Panadería y Cereal
+19,Gruesos,Alimentos Frescos
+20,Espaguetis,Productos de Panadería y Cereal
+21,Pechuga,Alimentos Frescos
+22,Salsa,Alimentos Secos y Enlatados
+23,Sal,Alimentos Secos y Enlatados
+24,Cristales,No Aplica
+25,Harina,Productos de Panadería y Cereal
+26,Chocolate,Snacks y Golosinas
+27,Vino,Bebidas
+28,Jamón,Alimentos Frescos
+29,Nachos,Snacks y Golosinas
+30,Quesillo,Alimentos Frescos
+31,Quesito,Alimentos Frescos
+32,Cuajada,Alimentos Frescos
+33,Almendras,Alimentos Secos y Enlatados
+34,Helado,Congelados
+35,Jabón,Productos de Limpieza y Hogar
+36,Champú,Cuidado Personal
+37,Café,'Bebidas'
+38,Cerveza,Bebidas
+39,Blanqueador,Productos de Limpieza y Hogar
+40,Panela,'Alimentos Frescos'
+41,Camarones,Alimentos Frescos
+42,Servilletas,Productos de Limpieza y Hogar
+43,Mayonesa,'Alimentos Frescos'
+44,Galletas,Productos de Panadería y Cereal
+45,Avena,Productos de Panadería y Cereal
+46,Cereal,Productos de Panadería y Cereal
+47,Cereales,Productos de Panadería y Cereal
+48,Hojuelas,Productos de Panadería y Cereal
+49,Relleno,Productos de Panadería y Cereal
+50,Granola,Productos de Panadería y Cereal
+51,Salchichas,Alimentos Frescos
+52,Arepas,Productos de Panadería y Cereal
+53,Bistec,Alimentos Frescos
+54,Carne,Alimentos Frescos
+55,Chata,Productos de Limpieza y Hogar
+56,Huevo,Alimentos Frescos
+57,Morrillo,Alimentos Frescos
+58,Pecho,Alimentos Frescos
+59,Posta,Alimentos Frescos
+60,Punta,No Aplica
+61,Solomito,Alimentos Frescos
+62,Solomo,Alimentos Frescos
+63,Tabla,No aplica
+64,Tableado,Productos de Panadería y Cereal
+65,Yogur,Alimentos Frescos
+66,Entero,Alimentos Frescos
+67,Maíz,Alimentos Frescos
+68,Aguardiente,Bebidas
+69,Mortadelas,'Alimentos Frescos'
+70,Suavizante,Productos de Limpieza y Hogar
+71,Fríjoles,'Alimentos Secos y Enlatados'
+72,Mini,No aplica
+73,Arena,Mascotas
+74,Miel,'Alimentos Frescos'
+75,Gel,'Cuidado Personal'
+76,Jugo,Bebidas
+77,Gaseosa,Bebidas
+78,Agua,Bebidas
+79,Refresco,Bebidas
+80,Zanahoria,Alimentos Frescos
+81,Bocaditos,'Snacks y Golosinas'
+82,Arequipe,Alimentos frescos
+83,Hamburguesas,Alimentos Congelados
+84,Papa,Alimentos Frescos
+85,Brownies,Productos de Panadería y Cereal
+86,Gelatina,Snacks y Golosinas
+87,Polvo,Productos de Limpieza y Hogar
+88,Pasabocas,Snacks y Golosinas
+89,Bebida,Bebidas
+90,Chorizos,Alimentos Frescos
+91,Pasta,Alimentos Secos y Enlatados
+92,Mermelada,Alimentos Frescos
+93,Mostaza,'Alimentos Secos y Enlatados'
+94,Maní,Snacks y Golosinas
+95,Bicarbonato,Productos de Limpieza y Hogar
+96,Esencia,Productos de Limpieza y Hogar
+97,Mezcla,Alimentos Secos y Enlatados
+98,Desodorante,Cuidado Personal
+99,Chocolatina,Snacks y Golosinas
+100,Bombón,Snacks y Golosinas
+101,Bolita,Mascotas
+102,Champiñon,Alimentos Frescos
+103,Pañales,Productos para Bebés
+104,Toallas,Productos de Limpieza y Hogar
+105,Alimento,Alimentos Frescos
+106,Ponqués,Productos de Panadería y Cereal
+107,Aguacate,Alimentos Frescos
+108,Duraznos,Alimentos Frescos
+109,Manzana,Alimentos frescos
+110,Gofres,Productos de Panadería y Cereal
+111,Tocino,'Alimentos Frescos'
+112,Cebolla,Alimentos Frescos
+113,Lasaña,Congelados
+114,Bolsas,Productos de Limpieza y Hogar
+115,Paños,Productos de Limpieza y Hogar
+116,Muslos,Alimentos Frescos
+117,Protectores,Productos de Salud y Farmacia
+118,Platos,Otros Artículos de Cocina y Hogar
+119,Sardinas,Alimentos Secos y Enlatados
+120,Filete,Alimentos Frescos
+121,Limpiador,Productos de Limpieza y Hogar
+122,Chili,Alimentos Secos y Enlatados
+123,Banano,Alimentos Frescos
+124,Vinagre,Alimentos Secos y Enlatados
+125,Palitos,Snacks y Golosinas
+126,Acondicionador,'Cuidado Personal'
+127,Cepillo,Cuidado Personal
+128,Aceitunas,Alimentos Frescos
+129,Coctel,Bebidas
+130,Ambientador,Productos de Limpieza y Hogar
+131,Fórmula,Productos para Bebés
+132,Removedor,Productos de Limpieza y Hogar
+133,Suero,Productos de Limpieza y Hogar
+134,Torta,Productos de Panadería y Cereal
+135,Té,Bebidas
+136,Arándanos,Alimentos Frescos
+137,Protector,Productos de Limpieza y Hogar
+138,Enjuague,Cuidado Personal
+139,Canela,Productos de Panadería y Cereal
+140,Máquina,No aplica
+141,Empanadas,Productos de Panadería y Cereal
+142,Fécula,'Alimentos Secos y Enlatados'
+143,Kumis,Bebidas
+144,Limpiavidrios,Productos de Limpieza y Hogar
+145,Caldo,Alimentos Secos y Enlatados
+146,Alcohol,Bebidas
+147,Esponja,Productos de Limpieza y Hogar
+148,Pimienta,Alimentos Secos y Enlatados
+149,Lechuga,Alimentos Frescos
+150,Talco,Cuidado Personal
+151,Bocados,Snacks y Golosinas
+152,Escoba,Productos de Limpieza y Hogar
+153,Chuzos,'Alimentos Frescos'
+154,Tostadas,Productos de Panadería y Cereal
+155,Bocadillos,Snacks y Golosinas
+156,Champiñones,Alimentos Frescos
+157,Macarrones,Alimentos Secos y Enlatados
+158,Ciruelas,Alimentos Frescos
+159,Desmanchador,Productos de Limpieza y Hogar
+160,Aromática,Bebidas
+161,Espuma,Productos de Limpieza y Hogar
+162,Perejil,Alimentos Frescos
+163,Años,No aplica
+164,Tampones,Cuidado Personal
+165,Espinaca,Alimentos Frescos
+166,Trapeador,Productos de Limpieza y Hogar
+167,Ron,Bebidas
+168,Trufas,Snacks y Golosinas
+169,Albahaca,Alimentos Frescos
+170,Brócoli,'Alimentos Frescos'
+171,Alcaparras,'Alimentos Frescos'
+172,Cerezas,Alimentos Frescos
+173,Palomitas,Snacks y Golosinas
+174,Vegetales,Alimentos Frescos
+175,Paño,Productos de Limpieza y Hogar
+176,Zumo,Bebidas
+177,Caramelo,Snacks y Golosinas
+178,Chips,Snacks y Golosinas
+179,Menta,Cuidado Personal
+180,Tequila,Bebidas
+181,Soya,'Alimentos Frescos'
+182,Compota,Alimentos Frescos
+183,Naranja,Alimentos Frescos
+184,Barra,Productos de Panadería y Cereal
+185,Desmaquillantes,Cuidado Personal
+186,Néctar,Bebidas
+187,Eliminador,Productos de Limpieza y Hogar
+188,Coloración,Cuidado Personal
+189,Salchichón,Alimentos Frescos
+190,Gomas,Snacks y Golosinas
+191,Esponjilla,Productos de Limpieza y Hogar
+192,Donas,Productos de Panadería y Cereal
+193,Tratamiento,Productos de Salud y Farmacia
+194,Cera,Productos de Limpieza y Hogar
+195,Cinta,No aplica
+196,Hilo,No aplica
+197,Pollo,Alimentos Frescos
+198,Ajo,Alimentos Frescos
+199,Pizza,Productos de Panadería y Cereal
+200,Vinagreta,Alimentos Frescos
+201,Tomate,Alimentos Frescos
+202,Algodón,Productos de Limpieza y Hogar
+203,Platanitos,Snacks y Golosinas
+204,Condón,Cuidado Personal
+205,Ají,Alimentos Frescos
+206,Pañuelos,Cuidado Personal
+207,Extruídos,Mascotas
+208,Tomates,Alimentos Frescos
+209,Costilla,Alimentos Frescos
+210,Corazones,Productos de Panadería y Cereal
+211,Piña,Alimentos Frescos
+212,Fideos,Alimentos Secos y Enlatados
+213,Tomillo,Alimentos Frescos
+214,Embutido,'Alimentos Frescos'
+215,Miga,Productos de Panadería y Cereal
+216,Mora,Alimentos Frescos
+217,Berenjena,Alimentos Frescos
+218,Tallarines,Productos de Panadería y Cereal
+219,Lentejas,Alimentos Secos y Enlatados
+220,Litchi,Alimentos Frescos
+221,Sirope,Alimentos Secos y Enlatados
+222,Sopa,Alimentos Secos y Enlatados
+223,Quitagrasa,Productos de Limpieza y Hogar
+224,Endulzante,Alimentos Secos y Enlatados
+225,Insecticida,Productos de Limpieza y Hogar
+226,Desmaquillante,Cuidado Personal
+227,Vela,Productos de Limpieza y Hogar
+228,Aplicadores,No aplica
+229,Macadamias,Alimentos Secos y Enlatados
+230,Pescado,Alimentos Frescos
+231,Betún,Productos de Panadería y Cereal
+232,Barquillos,Productos de Panadería y Cereal
+233,Jalapeños,Alimentos Frescos
+234,Ravioles,Congelados
+235,Vaselina,Cuidado Personal
+236,Antihongos,Productos de Salud y Farmacia
+237,Brandy,Bebidas
+238,Chicharrones,'Snacks y Golosinas'
+239,Cocadas,Productos de Panadería y Cereal
+240,Pepino,Alimentos Frescos
+241,Durazno,Alimentos Frescos
+242,Anchoas,Alimentos Secos y Enlatados
+243,Arvejas,Alimentos Frescos
+244,Besitos,Snacks y Golosinas
+245,Clorofila,Productos de Salud y Farmacia
+246,Cobertura,Productos de Panadería y Cereal
+247,Higo,Alimentos Frescos
+248,Paleta,Snacks y Golosinas
+249,Raíces,Alimentos Frescos
+250,Rosquillas,Productos de Panadería y Cereal
+251,Jengibre,Alimentos Frescos
+252,Brocha,Cuidado Personal
+253,Cábanos,Alimentos Frescos
+254,Esparragos,Alimentos Frescos
+255,Absorbentes,Productos de Limpieza y Hogar
+256,Caladitos,Productos de Panadería y Cereal
+257,Jalea,Alimentos Frescos
+258,Repuesto,No aplica
+259,Uva,Alimentos Frescos
+260,Achiras,Alimentos Frescos
+261,Comino,Alimentos Secos y Enlatados
+262,Picatostes,Productos de Panadería y Cereal
+263,Ensalada,'Alimentos Frescos'
+264,Curitas,Productos de Salud y Farmacia
+265,Langostinos,Alimentos Frescos
+266,Pulpa,'Alimentos Frescos'
+267,Postre,Productos de Panadería y Cereal
+268,Prelavado,Productos de Limpieza y Hogar
+269,Desinfectante,Productos de Limpieza y Hogar
+270,Anillos,No Aplica
+271,Brillador,Productos de Limpieza y Hogar
+272,Repelente,Productos de Salud y Farmacia
+273,Kiwi,Alimentos Frescos
+274,Guantes,Productos de Limpieza y Hogar
+275,Calamar,Alimentos Frescos
+276,Salvado,Productos de Panadería y Cereal
+277,Trucha,Alimentos Frescos
+278,Goma,Snacks y Golosinas
+279,Coco,'Alimentos Frescos'
+280,Hígado,Alimentos Frescos
+281,Huesos,Mascotas
+282,Mejillones,Alimentos Frescos
+283,Palmitos,Alimentos enlatados
+284,Chuleta,Alimentos Frescos
+285,Almidón,Alimentos Secos y Enlatados
+286,Base,'Productos de Limpieza y Hogar'
+287,Antiarrugas,Cuidado Personal
+288,Aclarador,Productos de Limpieza y Hogar
+289,Antiácido,Productos de Salud y Farmacia
+290,Pepinillos,Alimentos Frescos
+291,Colonia,'Cuidado Personal'
+292,Guayaba,Alimentos Frescos
+293,Cruasanes,Productos de Panadería y Cereal
+294,Aperitivo,Snacks y Golosinas
+295,Masmelos,Snacks y Golosinas
+296,Cazuela,Productos de Cocina y Hogar
+297,Contramuslos,'Alimentos Frescos'
+298,Panelitas,Productos de Panadería y Cereal
+299,Mariscos,Alimentos Frescos
+300,Vitamina,Productos de Salud y Farmacia
+301,Cebollitas,Alimentos Frescos
+302,Triple,No Aplica
+303,Mandarina,Alimentos Frescos
+304,Pimentones,Alimentos Frescos
+305,Galleta,Productos de Panadería y Cereal
+306,Ciruela,Alimentos Frescos
+307,Paella,Alimentos Frescos
+308,Puré,Productos de Panadería y Cereal
+309,Alcachofas,Alimentos Frescos
+310,Algas,Alimentos Frescos
+311,Licor,'Bebidas'
+312,Baño,Cuidado Personal
+313,Callo,Productos de Salud y Farmacia
+314,Cañón,No aplica
+315,Colada,Productos para Bebés
+316,Correa,Mascotas
+317,Curuba,Alimentos Frescos
+318,Dátiles,Alimentos Frescos
+319,Espinazo,Alimentos Frescos
+320,Flor,No aplica
+321,Limón,Alimentos Frescos
+322,Antiséptico,Productos de Salud y Farmacia
+323,Nueces,Alimentos Secos y Enlatados
+324,Nuez,'Alimentos Frescos'
+325,Canelones,Productos de Panadería y Cereal
+326,Pastel,Productos de Panadería y Cereal
+327,Bretzels,Snacks y Golosinas
+328,Sémola,Alimentos Secos y Enlatados
+329,Tijeras,No aplica
+330,Colorante,'Productos de Cocina y Hogar'
+331,Mogollas,Productos de Panadería y Cereal
+332,Lápiz,No aplica
+333,Paté,Alimentos Secos y Enlatados
+334,Cortacutículas,Cuidado Personal
+335,Encurtido,'Alimentos Frescos'
+336,Bronceador,Cuidado Personal
+337,Tónico,Cuidado Personal
+338,Juguetes,No aplica
+339,Lima,Alimentos Frescos
+340,Loción,Cuidado Personal
+341,Autobronceador,Cuidado Personal
+342,Dulce,Snacks y Golosinas
+343,Pasas,Alimentos Secos y Enlatados
+344,Aclarante,Cuidado Personal
+345,Dulces,Snacks y Golosinas
+346,Velas,No aplica
+347,Control,Productos de Salud y Farmacia
+348,Kit,No Aplica
+349,Cloruro,Productos de Limpieza y Hogar
+350,Rollo,Productos de Panadería y Cereal
+351,Adhesivo,Productos de Limpieza y Hogar
+352,Turrón,Productos de Panadería y Cereal
+353,Bases,Productos de Limpieza y Hogar
+354,Delineador,Cuidado Personal
+355,Exfoliante,Cuidado Personal
+356,Croquetas,Mascotas
+357,Laca,'Cuidado Personal'
+358,Preparados,Alimentos Frescos
+359,Sanduche,Productos de Panadería y Cereal
+360,Poliático,No aplica
+361,Descongestionante,Productos de Salud y Farmacia
+362,Amaretto,Bebidas
+363,Acetilsalicílico,Productos de Salud y Farmacia
+364,Antiimperfecciones,Productos de Cuidado Personal
+365,Cebada,Productos de Panadería y Cereal
+366,Cuna,Productos para Bebés
+367,Cono,Productos de Panadería y Cereal
+368,Crepes,Productos de Panadería y Cereal
+369,Bisacodilo,Productos de Salud y Farmacia
+370,Enhebradores,Productos de Limpieza y Hogar
+371,Neutralizador,Productos de Limpieza y Hogar
+372,Granos,Alimentos Secos y Enlatados
+373,Dispositivos,No aplica
+374,Lenguas,Productos de Panadería y Cereal
+375,Limpia,'Productos de Limpieza y Hogar'
+376,Lomito,Alimentos Frescos
+377,Mango,Alimentos Frescos
+378,Saborizante,No aplica
+379,Pinza,No aplica
+380,Pomo,Productos de Limpieza y Hogar
+381,Preplanchado,Productos de Limpieza y Hogar
+382,Aplicador,No aplica
+383,Muchacho,Alimentos Frescos
+384,Ablandacarnes,Productos de Limpieza y Hogar
+385,Absorbente,Productos de Limpieza y Hogar
+386,Gatos,Mascotas
+387,Acetato,Productos de Limpieza y Hogar
+388,Albondigas,Alimentos Frescos
+389,Almojábanas,Productos de Panadería y Cereal
+390,Antipulgas,Productos de Salud y Farmacia
+391,Banda,'No Aplica'
+392,Berenjenas,Alimentos Frescos
+393,Blanqueados,No Aplica
+394,Bofe,Alimentos Frescos
+395,Bolso,No aplica
+396,Bondiola,Alimentos Frescos
+397,Bozal,No aplica
+398,Brillo,Productos de Limpieza y Hogar
+399,Carimañolas,Alimentos Frescos
+400,Claras,Alimentos Frescos
+401,Claro,No aplica
+402,Comedero,Mascotas
+403,Habichuelas,Alimentos Frescos
+404,Corazón,Productos de Panadería y Cereal
+405,Texturizado,Alimentos Secos y Enlatados
+406,Encrespador,Cuidado Personal
+407,Esterilla,No aplica
+408,Estuche,No Aplica
+409,Fresas,Alimentos frescos
+410,Moras,Alimentos Frescos
+411,Fig,Alimentos Frescos
+412,Grisines,Productos de Panadería y Cereal
+413,Guindillas,Alimentos Frescos
+414,Hueso,Mascotas
+415,Hidróxido,Productos de Salud y Farmacia
+416,Mangos,Alimentos Frescos
+417,Manzanitas,Alimentos Frescos
+418,Matacucarachas,Productos de Limpieza y Hogar
+419,Hojas,Productos de Limpieza y Hogar
+420,Nido,Productos de Limpieza y Hogar
+421,Pajarilla,Alimentos Secos y Enlatados
+422,Paletero,Productos de Panadería y Cereal
+423,Panqueques,Productos de Panadería y Cereal
+424,Pandebonos,Productos de Panadería y Cereal
+425,Pepinos,Alimentos Frescos
+426,Perfilador,'Cuidado Personal'
+427,Pesuña,Alimentos Frescos
+428,Recolector,No Aplica
+429,Brevas,Alimentos Frescos
+430,Espray,Productos de Limpieza y Hogar
+431,Restaurador,Productos de Salud y Farmacia
+432,Rollos,Productos de Panadería y Cereal
+433,Salmón,Alimentos Frescos
+434,Seda,Cuidado Personal
+435,Terbinafina,Productos de Salud y Farmacia
+436,Tamal,Productos de Panadería y Cereal
+437,Velitas,Productos de Limpieza y Hogar
+438,Mate,Bebidas
+439,Mondongo,Alimentos Frescos
+440,Lengua,'Alimentos Frescos'
+441,Lomos,Alimentos frescos
+442,Vasos,No Aplica
+443,Fresa,Alimentos Frescos
+444,Energizante,Bebidas
+445,Tenedores,No aplica
+446,Cucharas,Otros Artículos de Cocina y Hogar
+447,Alas,Alimentos Frescos
+448,Cintas,No aplica
+449,Pilas,No Aplica
+450,Plástico,'Productos de Limpieza y Hogar'
+451,Bombillo,No aplica
+452,Encendedor,No aplica
+453,Cuchuco,Alimentos Secos y Enlatados
+454,Palillos,Otros Artículos de Cocina y Hogar
+455,Imitación,No aplica
+456,Cacao,Alimentos Secos y Enlatados
+457,Fritas,Snacks y Golosinas
+458,Bolsa,No Aplica
+459,Sazonador,'Alimentos Secos y Enlatados'
+460,Palitroques,Snacks y Golosinas
+461,Cigarrillos,Productos de Salud y Farmacia
+462,Vísceras,Alimentos Frescos
+463,Burrito,Productos de Panadería y Cereal
+464,Quinua,'Alimentos Frescos'
+465,Brazo,Productos de Panadería y Cereal
+466,Mantecada,Productos de Panadería y Cereal
+467,Bálsamo,Cuidado Personal
+468,Longaniza,Alimentos Frescos
+469,Cabo,No aplica
+470,Postas,Alimentos Frescos

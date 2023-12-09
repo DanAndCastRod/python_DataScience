@@ -1,0 +1,134 @@
+,tipo,grupo
+0,Crema,Cuidado Personal
+1,Aceite,Alimentos Secos y Enlatados
+2,Azúcar,Alimentos Secos y Enlatados.
+3,Arroz,Alimentos Secos y Enlatados
+4,Mantequilla,Alimentos Frescos
+5,Margarina,Alimentos Frescos
+6,Huevos,Alimentos Frescos
+7,Queso,Alimentos Frescos.
+8,Atún,Alimentos Secos y Enlatados
+9,Espaguetis,Alimentos Secos y Enlatados
+10,Salsa,Alimentos Secos y Enlatados
+11,Sal,Alimentos Secos y Enlatados
+12,Cristales,Otros Artículos de Cocina y Hogar
+13,Harina,Alimentos Secos y Enlatados
+14,Chocolate,Snacks y Golosinas
+15,Lentejas,Alimentos Secos y Enlatados
+16,Panela,Alimentos Secos y Enlatados
+17,Mayonesa,Alimentos Secos y Enlatados
+18,Avena,Alimentos Secos y Enlatados
+19,Cereal,Productos de Panadería y Cereal
+20,Hojuelas,Productos de Panadería y Cereal
+21,Muesli,Productos de Panadería y Cereal
+22,Granola,Productos de Panadería y Cereal
+23,Maíz,Alimentos Secos y Enlatados
+24,Fríjoles,Alimentos Secos y Enlatados
+25,Miel,Alimentos Frescos
+26,Garbanzos,Alimentos Secos y Enlatados
+27,Gelatina,Alimentos Secos y Enlatados
+28,Polvo,Productos de Limpieza y Hogar
+29,Guacamole,Alimentos Frescos
+30,Pasta,Alimentos Secos y Enlatados
+31,Mermelada,Alimentos Secos y Enlatados
+32,Mostaza,Alimentos Secos y Enlatados.
+33,Esencia,No Aplica.
+34,Mezcla,Productos de Panadería y Cereal.
+35,Duraznos,Alimentos Frescos
+36,Levadura,Alimentos Secos y Enlatados
+37,Sardinas,Alimentos Secos y Enlatados
+38,Quinua,Alimentos Secos y Enlatados
+39,Vinagre,Alimentos Secos y Enlatados.
+40,Aceitunas,Alimentos Secos y Enlatados
+41,Coctel,Bebidas
+42,Suero,Productos de Salud y Farmacia
+43,Canela,Alimentos Secos y Enlatados
+44,Fécula,Alimentos Secos y Enlatados
+45,Caldo,Alimentos Secos y Enlatados
+46,Pimienta,Alimentos Secos y Enlatados
+47,Champiñones,Alimentos Frescos.
+48,Arvejas,Alimentos Secos y Enlatados
+49,Macarrones,Alimentos Secos y Enlatados
+50,Oregano,Alimentos Secos y Enlatados
+51,Alcaparras,Alimentos Secos y Enlatados
+52,Cerezas,Alimentos Frescos
+53,Sazonador,Alimentos Secos y Enlatados
+54,Ajonjolí,Alimentos Secos y Enlatados
+55,Chips,Snacks y Golosinas
+56,Barra,Productos de Panadería y Cereal
+57,Cúrcuma,Alimentos Secos y Enlatados
+58,Ajo,Alimentos Frescos
+59,Salchichas,Alimentos Frescos
+60,Vinagreta,Alimentos Secos y Enlatados.
+61,Ají,Alimentos Frescos
+62,Tomates,Alimentos Frescos
+63,Fideos,Alimentos Secos y Enlatados.
+64,Tomillo,Alimentos Secos y Enlatados
+65,Miga,Productos de Panadería y Cereal
+66,Tallarines,Alimentos Secos y Enlatados
+67,Litchi,Alimentos Frescos
+68,Sirope,Alimentos Secos y Enlatados
+69,Sopa,Alimentos Secos y Enlatados
+70,Endulzante,Alimentos Secos y Enlatados
+71,Pescado,Alimentos Frescos
+72,Piña,Alimentos Frescos
+73,Jalapeños,Alimentos en Conserva y Enlatados
+74,Anchoas,Alimentos Secos y Enlatados
+75,Cobertura,Productos de Panadería y Cereal
+76,Jengibre,Alimentos Frescos.
+77,Trigo,Alimentos Secos y Enlatados
+78,Esparragos,Alimentos Frescos
+79,Comino,Alimentos Secos y Enlatados
+80,Color,Cuidado Personal
+81,Laurel,Alimentos Secos y Enlatados
+82,Ensalada,Alimentos Frescos
+83,Linaza,Alimentos Secos y Enlatados
+84,Salvado,Alimentos Secos y Enlatados
+85,Coco,Alimentos Frescos
+86,Soya,Alimentos Secos y Enlatados
+87,Pepinillos,Alimentos Secos y Enlatados
+88,Mejillones,Alimentos Frescos
+89,Base,Cuidado Personal
+90,Cebollitas,Alimentos Frescos
+91,Clavo,Alimentos Secos y Enlatados
+92,Pimentones,Alimentos Frescos
+93,Carne,Alimentos Frescos
+94,Puré,Alimentos Secos y Enlatados
+95,Requesón,Alimentos Frescos
+96,Achiote,Alimentos Secos y Enlatados
+97,Alcachofas,Alimentos Frescos
+98,Algas,Alimentos Frescos
+99,Palmitos,Alimentos en Conserva.
+100,Corazones,No Aplica
+101,Curry,Alimentos Secos y Enlatados
+102,Flor,Otros Artículos de Cocina y Hogar
+103,Nuez,Alimentos Secos y Enlatados
+104,Sémola,Alimentos Secos y Enlatados
+105,Encurtido,Alimentos Secos y Enlatados
+106,Dulce,Snacks y Golosinas
+107,Calamar,Alimentos Frescos
+108,Guascas,Alimentos Secos y Enlatados
+109,Orzo,Alimentos Secos y Enlatados
+110,Cebada,Alimentos Secos y Enlatados
+111,Chimichurri,Alimentos Secos y Enlatados
+112,Guiso,Alimentos Secos y Enlatados
+113,Canelones,Alimentos Frescos
+114,Ablandacarnes,Alimentos Secos y Enlatados
+115,Berenjenas,Alimentos Frescos
+116,Mango,Alimentos Frescos
+117,Claras,Alimentos Frescos
+118,Habichuelas,Alimentos Secos y Enlatados
+119,Texturizado,Alimentos Secos y Enlatados
+120,Fresas,Alimentos Frescos
+121,Moras,Alimentos Frescos
+122,Guindillas,Alimentos Frescos
+123,Espuma,Productos de Limpieza y Hogar
+124,Pepinos,Alimentos Frescos
+125,Salmón,Alimentos Frescos
+126,Almidón,Alimentos Secos y Enlatados.
+127,Cuchuco,Alimentos Secos y Enlatados
+128,Cacao,Alimentos Secos y Enlatados
+129,Albahaca,Alimentos Frescos
+130,Brevas,Alimentos Frescos
+131,Paté,Alimentos Secos y Enlatados
+132,Hummus,Alimentos Frescos

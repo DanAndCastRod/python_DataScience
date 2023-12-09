@@ -1,0 +1,39 @@
+tipo;grupo;presentacion;unidades
+Huevos;Alimentos Frescos;24.0;unidades
+Arequipe;Alimentos Frescos;250.0;g
+Cobertura;Alimentos Frescos;567.0;g
+Queso;Alimentos Frescos;200.0;g
+Leche;Alimentos Frescos;1000.0;ml
+Bistec;Alimentos Frescos;1000.0;g
+Chorizos;Alimentos Frescos;1200.0;g
+Salchichas;Alimentos Frescos;800.0;g
+Salsa;Alimentos Secos y Enlatados;190.0;g
+Soya;Alimentos Secos y Enlatados;800.0;g
+Fríjoles;Alimentos Secos y Enlatados;500.0;g
+Aceite;Alimentos Secos y Enlatados;1000.0;ml
+Sal;Alimentos Secos y Enlatados;465.0;g
+Mezcla;Alimentos Secos y Enlatados;85.0;g
+Pasta;Alimentos Secos y Enlatados;250.0;g
+Endulzante;Alimentos Secos y Enlatados;50.0;g
+Caldo;Alimentos Secos y Enlatados;138.0;g
+Paté;Alimentos Secos y Enlatados;156.0;g
+Refresco;Bebidas;500.0;ml
+Vino;Bebidas Alcohólicas;750.0;ml
+Tequila;Bebidas Alcohólicas;750.0;ml
+Papas a la Francesa;Congelados;1000.0;g
+Helado;Congelados;580.0;g
+Alimento Húmedo para Perros;Mascotas;100.0;g
+Blanqueador;Productos de Limpieza y Hogar;2000.0;ml
+Repuesto;Productos de Limpieza y Hogar;42.0;ml
+Detergente;Productos de Limpieza y Hogar;900.0;g
+Ambientador;Productos de Limpieza y Hogar;30.0;g
+Quitagrasa;Productos de Limpieza y Hogar;500.0;ml
+Vela;Productos de Limpieza y Hogar;70.0;g
+Esponjilla;Productos de Limpieza y Hogar;3.0;unidades
+Limpiador;Productos de Limpieza y Hogar;960.0;ml
+Empanadas;Productos de Panadería y Cereal;675.0;g
+Fórmula;Productos para Bebés;900.0;g
+Palomitas;Snacks y Golosinas;160.0;g
+Galletas;Snacks y Golosinas;234.0;g
+Papas Fritas;Snacks y Golosinas;300.0;g
+Bocadillos;Snacks y Golosinas;300.0;g
