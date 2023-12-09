@@ -1,0 +1,2992 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Evaluación de Precios y optimización de lista de productos</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="Listas_precios_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Listas_precios_files/libs/quarto-html/quarto.js"></script>
+<script src="Listas_precios_files/libs/quarto-html/popper.min.js"></script>
+<script src="Listas_precios_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Listas_precios_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Listas_precios_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Listas_precios_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Listas_precios_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Listas_precios_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Listas_precios_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Evaluación de Precios y optimización de lista de productos</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p><strong><em>Autor:</em></strong> <em>Daniel Andrés Castañeda</em></p>
+<section id="introducción" class="level2">
+<h2 class="anchored" data-anchor-id="introducción">Introducción</h2>
+<p>En la actualidad, con los avances de tecnología de la información y el crecimiento del e-comerce, los usuarios tienen cada vez más capacidad de decisión sobre los productos que adquieren y consumen, esto debido a una alta disponibilidad y variedad de posibilidades de ítems de la canasta básica, el abanico de posibilidades se expande cuando consideramos distintos almacenes o tiendas y podemos comparar sus productos. En ocasiones decidir el producto más económico y encontrar todo en un solo lugar se dificulta cuando se consideran todas las posibilidades. Este proyecto se centra en abordar el proceso de decisión por precio de diferentes productos de una lista de compras teniendo en cuenta elementos como el presupuesto, disponibilidad en almacenes y movilización de un almacén a otro.</p>
+<p>La minería de datos, en su capacidad de descubrir patrones y relaciones en grandes conjuntos de datos, ofrece un potencial significativo para agrupar, organizar y determinar qué elementos de la lista de productos es la mejor opción.</p>
+<p>La metodología de este este proyecto se implica la recolección y el análisis de datos de productos de diversas tiendas minoristas y almacenes de cadena, utilizando técnicas de raspado web para obtener información relevante como nombres de productos, marcas, presentaciones y precios.</p>
+<p>Posteriormente, estos datos son sometidos a un proceso de limpieza, preprocesamiento y un análisis exploratorio, preparándolos para su uso en diferentes modelos. Los modelos y técnicas seleccionados serán aplicados con el fin de identificar la opción más económica de compra.</p>
+</section>
+<section id="descripción-de-la-base-de-datos" class="level2">
+<h2 class="anchored" data-anchor-id="descripción-de-la-base-de-datos">Descripción de la base de datos</h2>
+<section id="origen-de-datos" class="level3">
+<h3 class="anchored" data-anchor-id="origen-de-datos">Origen de Datos</h3>
+<p>La base de datos presentada a continuación tiene origen en la página web <a href="https://losprecios.co/">Los precios</a> la cual se encarga de recopilar y presentar precios de distintos almacenes de cadena y tiendas del país, se extraen datos directamente desde la página mediante técnicas de raspado web por lo que se requiere definir los parámetros de búsqueda y programar el proceso de extracción de manera que se puedan extraer los precios para los productos de internet.</p>
+<p>El proyecto pretende utilizar técnicas de aprendizaje supervisado y no supervisado para extraer información útil en el proceso de decisión.</p>
+<p>La base de datos extraida presenta las siguientes características:</p>
+<div class="cell" data-execution_count="783">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> nltk</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> openai</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> openai <span class="im">import</span> OpenAI</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">"ignore"</span>, category<span class="op">=</span><span class="pp">DeprecationWarning</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'precios.csv'</span>).drop(<span class="st">'Unnamed: 0'</span>, axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>df.info()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
+RangeIndex: 12341 entries, 0 to 12340
+Data columns (total 5 columns):
+ #   Column        Non-Null Count  Dtype 
+---  ------        --------------  ----- 
+ 0   nombre        12341 non-null  object
+ 1   marca         12341 non-null  object
+ 2   presentacion  12341 non-null  object
+ 3   precio        12341 non-null  object
+ 4   lugar         12341 non-null  object
+dtypes: object(5)
+memory usage: 482.2+ KB</code></pre>
+</div>
+</div>
+<p>Al extraer la información nos encontramos con 12341 ítems distintos extraídos para los Almacenes Éxito (7984 ítems) y Jumbo (2789 ítems) y las tiendas Ara (697 ítems) y D1 (871 ítems) para los cuales se extrajo la siguiente información: * nombre: corresponde al nombre que recibe cada producto en el almacén es una variable nominal.</p>
+<ul>
+<li><p>marca: corresponde a la marca del producto la cual también puede funcionar como variable nominal.</p></li>
+<li><p>presentación: esta variable contiene tanto la cantidad de producto en la presentación como la unidad de medición del producto que puede estar en unidades de gramos, miligramos, kilogramos, litros, mililitros, etc. que nos permitirán conocer cuál será la mejor presentación disponible en el almacén para el producto que buscamos comprar, en este caso la variable fue extraída como tipo <code>objeto</code> lo cual es contraproducente para el análisis que deseamos hacer.</p></li>
+<li><p>precio: corresponde al precio en pesos colombianos sin embargo en el proceso de extracción se guardó como tipo <code>object</code> debido a que cuenta con un carácter alfanumérico.</p></li>
+<li><p>lugar: El lugar corresponde al nombre del almacén en el que se encuentra el producto y puede hacer las veces de variable categórica ordinal.</p></li>
+</ul>
+</section>
+</section>
+<section id="objetivo-del-análisis" class="level2">
+<h2 class="anchored" data-anchor-id="objetivo-del-análisis">Objetivo del análisis</h2>
+<p>El objetivo del análisis es extraer, organizar y analizar la información de forma que permita al consumidor encontrar los productos en la mejor presentación, optimizando la ejecución del presupuesto.</p>
+</section>
+<section id="metodología." class="level2">
+<h2 class="anchored" data-anchor-id="metodología.">Metodología.</h2>
+<p>En primera instancia se utilizan técnicas de raspado web para extraer los datos de la página de <a href="https://losprecios.co">losprecios.co</a>, debido a que la estructura de la web en cuestión divide cada uno de los almacenes en una url distinta o en una entidad distinta debemos hacer un análisis inicial a ésta url, y a la cantidad de páginas a visitar.</p>
+<svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" viewbox="0 0 486.73 71.35">
+<defs>
+<style>.cls-1{fill:none;stroke:#000;stroke-miterlimit:10;}.cls-2,.cls-4{font-size:12px;font-family:MyriadPro-Regular, Myriad Pro;}.cls-2{letter-spacing:0em;}.cls-3{letter-spacing:0em;}.cls-5{letter-spacing:0em;}.cls-6{letter-spacing:0.01em;}.cls-7{letter-spacing:-0.01em;}.cls-8{letter-spacing:-0.02em;}.cls-9{letter-spacing:-0.01em;}.cls-10{letter-spacing:-0.01em;}.cls-11{letter-spacing:0em;}.cls-12{letter-spacing:-0.01em;}.cls-13{letter-spacing:-0.01em;}.cls-14{letter-spacing:0em;}</style>
+</defs><g id="Capa_2" data-name="Capa 2"><g id="Capa_1-2" data-name="Capa 1"><image width="451" height="40" transform="translate(0 15.16)" href="data:image/png;base64,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"></image><rect class="cls-1" x="102.5" y="15.16" width="193" height="40"></rect><text class="cls-2" transform="translate(102.63 10.04)">D<tspan class="cls-3" x="8.04" y="0">ominio</tspan></text><rect class="cls-1" x="296" y="15.16" width="88" height="40"></rect><rect class="cls-1" x="395" y="15.16" width="46" height="40"></rect><text class="cls-4" transform="translate(295.87 10.35)">Ide<tspan class="cls-5" x="15.65" y="0">n</tspan><tspan class="cls-3" x="22.26" y="0">tificador de tienda</tspan></text><text class="cls-4" transform="translate(394.81 68.35)">sele<tspan class="cls-6" x="19.61" y="0">c</tspan><tspan class="cls-7" x="25.14" y="0">t</tspan><tspan x="29.04" y="0">or de pa</tspan><tspan class="cls-7" x="70.03" y="0">g</tspan><tspan x="76.67" y="0">ina</tspan></text><rect class="cls-1" x="5" y="15.16" width="96" height="40"></rect><text class="cls-4" transform="translate(4.87 68.35)"><tspan class="cls-8">P</tspan><tspan class="cls-9" x="6.19" y="0">r</tspan><tspan x="10" y="0">o</tspan><tspan class="cls-7" x="16.58" y="0">t</tspan><tspan x="20.48" y="0">o</tspan><tspan class="cls-10" x="27.07" y="0">c</tspan><tspan x="32.38" y="0">olo de t</tspan><tspan class="cls-11" x="70.22" y="0">r</tspan><tspan x="74.09" y="0">ans</tspan><tspan class="cls-12" x="91.28" y="0">f</tspan><tspan x="94.63" y="0">e</tspan><tspan class="cls-13" x="100.64" y="0">r</tspan><tspan class="cls-14" x="104.45" y="0">encia</tspan></text></g></g>
+</svg>
+<p>La url se compone de 4 partes, el protocolo de transferencia utilizado para enviar datos entre el navegador y el sitio web, el dominio que corresponde al nombre único con el que se identifica la dirección de la página a la cual queremos extraer la información, el identificador de tienda que como su nombre lo dice, nos señala de que tienda estamos extrayendo los recursos, y el selector de página que nos ayuda a identificar la página de la que estamos extrayendo la información.</p>
+<p>Debido a que no conocemos la cantidad exacta de páginas que puede tener cada almacén o tienda lo primero que necesitamos hacer es identificar la cantidad máximas de páginas que se tiene para cada una de ellas por lo que lo mejor será quedarnos con la última página que tiene datos disponibles.</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> bs4 <span class="im">import</span> BeautifulSoup</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="47">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> bs4 <span class="im">import</span> BeautifulSoup</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> eval_cantidad_items_page(url):</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        response <span class="op">=</span> requests.get(url)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        response.raise_for_status()  <span class="co"># Esto lanzará una excepción si la respuesta es un error</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>        soup <span class="op">=</span> BeautifulSoup(response.text, <span class="st">'html.parser'</span>)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>        conts <span class="op">=</span> soup.find_all(class_<span class="op">=</span><span class="st">'bq-cn-r'</span>)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">len</span>(conts)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> requests.RequestException <span class="im">as</span> e:</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Error al realizar la solicitud HTTP: </span><span class="sc">{</span>e<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="dv">0</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> max_pages_binary_search(url, max_limit):</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    low <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    high <span class="op">=</span> max_limit</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> low <span class="op">&lt;=</span> high:</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>        mid <span class="op">=</span> (low <span class="op">+</span> high) <span class="op">//</span> <span class="dv">2</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> eval_cantidad_items_page(url.<span class="bu">format</span>(mid)) <span class="op">&gt;</span> <span class="dv">0</span> <span class="kw">and</span> eval_cantidad_items_page(url.<span class="bu">format</span>(mid <span class="op">+</span> <span class="dv">1</span>)) <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> mid</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> eval_cantidad_items_page(url.<span class="bu">format</span>(mid)) <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>            high <span class="op">=</span> mid <span class="op">-</span> <span class="dv">1</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>            low <span class="op">=</span> mid <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">-</span><span class="dv">1</span>  <span class="co"># Retorna -1 si no encuentra ninguna página válida</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="co"># URL de ejemplo, reemplaza con la URL adecuada</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>urls <span class="op">=</span> {</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Éxito'</span>:<span class="st">'https://losprecios.co/%C3%A9xito_t6?p=</span><span class="sc">{}</span><span class="st">'</span>,</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Ara'</span>:<span class="st">'https://losprecios.co/ara_t2?p=</span><span class="sc">{}</span><span class="st">'</span>,</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Jumbo'</span>:<span class="st">'https://losprecios.co/jumbo_t7?p=</span><span class="sc">{}</span><span class="st">'</span>,</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>    <span class="st">'D1'</span>:<span class="st">'https://losprecios.co/d1_t1?p=</span><span class="sc">{}</span><span class="st">'</span>,</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>max_pages <span class="op">=</span> {}</span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> urls:</span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>    url <span class="op">=</span> urls[i]</span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>    max_pages[i] <span class="op">=</span> max_pages_binary_search(url,<span class="dv">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Se implementa una estrategia de búsqueda binaria para dar con la ultima página de cada tienda, asumiendo que el valor maximo de cada tienda es inferior a las mil paginas. Para saber la cantidad de productos diponibles en cada página se hizo uso de un selector css de clase <code>.bq-cn-r</code> el cual correspondía a la clase que identifica los contenedores de productos, por lo que la pagina que no tuviera estos selectores nos arrojaría un array vacío de longitud 0. De este modo, se configura el algoritmo de búsqueda binaria para dar con la última página con información para cada tienda o almacen obteniendo los siguientes resultados:</p>
+<ul>
+<li><p>Éxito con 799 páginas.</p></li>
+<li><p>Jumbo con 279 páginas.</p></li>
+<li><p>Ara con 70 páginas.</p></li>
+<li><p>D1 con 88 páginas.</p></li>
+</ul>
+<p>Posteriormente se implementa la rutina de raspado de datos para cada una de las páginas de los distintos almacenes y se extrae la información de cada producto presente usando los selectores <code>.mrg-0</code> para el encabezado de cada producto donde se encuentra el nombre del producto, la marca y la presentación, y posteriormente se extrae la información de precio a través del selector <code>.t-ed-pr</code>.</p>
+<div class="cell" data-execution_count="53">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>datos <span class="op">=</span> []</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> raspar_datos(url, nombre_tienda, max_pagina):</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, max_pagina <span class="op">+</span> <span class="dv">1</span>):</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>        response <span class="op">=</span> requests.get(url.<span class="bu">format</span>(i))</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>        soup <span class="op">=</span> BeautifulSoup(response.text, <span class="st">'html.parser'</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        conts <span class="op">=</span> soup.find_all(class_<span class="op">=</span><span class="st">'bq-cn-r'</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> cont <span class="kw">in</span> conts:</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>            cont_text <span class="op">=</span> cont.find(class_<span class="op">=</span><span class="st">'mrg-0'</span>)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>            cont_nombre <span class="op">=</span> cont_text.find(class_<span class="op">=</span><span class="st">'eít-enl-p'</span>)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>            nombre <span class="op">=</span> cont_nombre.text</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>            marca <span class="op">=</span> cont_nombre.find_next(<span class="st">'span'</span>).find_next(<span class="st">'span'</span>).text</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>            presentacion <span class="op">=</span> cont.find(class_<span class="op">=</span><span class="st">'no-lín'</span>).text</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>            precio <span class="op">=</span> cont.find(class_<span class="op">=</span><span class="st">'t-ed-pr'</span>).text</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Añadiendo al conjunto de datos</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>            datos.append({</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>                <span class="st">'nombre'</span>: nombre,</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>                <span class="st">'marca'</span>: marca,</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>                <span class="st">'presentacion'</span>: presentacion,</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>                <span class="st">'precio'</span>: precio,</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>                <span class="st">'lugar'</span>: nombre_tienda</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>            })</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> i<span class="op">%</span><span class="dv">20</span> <span class="op">==</span> <span class="dv">0</span>: </span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="ss">f'página </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss"> de </span><span class="sc">{</span>max_pagina<span class="sc">}</span><span class="ss">'</span>) </span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> i<span class="op">==</span>max_pagina: <span class="bu">print</span>(<span class="ss">f'página </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss"> de </span><span class="sc">{</span>max_pagina<span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Raspado para cada tienda</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> tienda, url <span class="kw">in</span> urls.items():</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Raspando datos de </span><span class="sc">{</span>tienda<span class="sc">}</span><span class="ss">..."</span>)</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>    raspar_datos(url, tienda, max_pages[tienda])</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a><span class="co"># Creando el DataFrame</span></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(datos)</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Mostrando algunos datos</span></span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Raspando datos de Éxito...
+página 20 de 799
+página 40 de 799
+página 60 de 799
+página 80 de 799
+página 100 de 799
+página 120 de 799
+página 140 de 799
+página 160 de 799
+página 180 de 799
+página 200 de 799
+página 220 de 799
+página 240 de 799
+página 260 de 799
+página 280 de 799
+página 300 de 799
+página 320 de 799
+página 340 de 799
+página 360 de 799
+página 380 de 799
+página 400 de 799
+página 420 de 799
+página 440 de 799
+página 460 de 799
+página 480 de 799
+página 500 de 799
+página 520 de 799
+página 540 de 799
+página 560 de 799
+página 580 de 799
+página 600 de 799
+página 620 de 799
+página 640 de 799
+página 660 de 799
+página 680 de 799
+página 700 de 799
+página 720 de 799
+página 740 de 799
+página 760 de 799
+página 780 de 799
+página 799 de 799
+Raspando datos de Ara...
+página 20 de 70
+página 40 de 70
+página 60 de 70
+página 70 de 70
+Raspando datos de Jumbo...
+página 20 de 279
+página 40 de 279
+página 60 de 279
+página 80 de 279
+página 100 de 279
+página 120 de 279
+página 140 de 279
+página 160 de 279
+página 180 de 279
+página 200 de 279
+página 220 de 279
+página 240 de 279
+página 260 de 279
+página 279 de 279
+Raspando datos de D1...
+página 20 de 88
+página 40 de 88
+página 60 de 88
+página 80 de 88
+página 88 de 88</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="53">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">nombre</th>
+<th data-quarto-table-cell-role="th">marca</th>
+<th data-quarto-table-cell-role="th">presentacion</th>
+<th data-quarto-table-cell-role="th">precio</th>
+<th data-quarto-table-cell-role="th">lugar</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>Leche Larga Vida Descremada</td>
+<td>Alquería</td>
+<td>1 000 ml</td>
+<td>3 970 $</td>
+<td>Éxito</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>Leche Larga Vida Descremada Deslactosada</td>
+<td>Finesse</td>
+<td>3 300 ml</td>
+<td>10 590 $</td>
+<td>Éxito</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>Leche Pasteurizada Descremada</td>
+<td>Colanta</td>
+<td>1 000 ml</td>
+<td>2 280 $</td>
+<td>Éxito</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>Leche Larga Vida Descremada Deslactosada</td>
+<td>Alpina</td>
+<td>1 000 ml</td>
+<td>7 520 $</td>
+<td>Éxito</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>Leche Larga Vida Descremada Deslactosada</td>
+<td>Alpina</td>
+<td>200 ml</td>
+<td>2 564 $</td>
+<td>Éxito</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Al observar la salida de los datos, notamos que todos los valores se encuentran en formato <code>str</code> por lo que debemos extraer las caracteristicas más importantes de cada uno de estos.</p>
+<div class="cell" data-execution_count="172">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> spacy</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar el modelo en español</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>nlp <span class="op">=</span> spacy.load(<span class="st">'es_core_news_sm'</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> extraer_sujeto(texto):</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    doc <span class="op">=</span> nlp(texto)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> token <span class="kw">in</span> doc:</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Buscar el sujeto nominal (nominal subject)</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="st">'subj'</span> <span class="kw">in</span> token.dep_:</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> token.text</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Ejemplo de uso</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>oracion <span class="op">=</span> <span class="st">"Whisky añejo"</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="co"># sujeto = extraer_sujeto(oracion)</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="co"># print(f"El sujeto extraído es: {sujeto}")</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> extraer_sujeto2(texto):</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    doc <span class="op">=</span> nlp(texto)</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> token <span class="kw">in</span> doc:</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="st">'ROOT'</span> <span class="op">==</span>token.dep_:</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> token.text</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>A continuación se realiza la normalización de algunos valores tanto de la presentación como de las unidades y precios del producto.</p>
+<div class="cell" data-execution_count="785">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>df_precios <span class="op">=</span> df.copy()</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>df_precios[<span class="st">"unidades"</span>] <span class="op">=</span> df_precios[<span class="st">"presentacion"</span>].<span class="bu">apply</span>(<span class="kw">lambda</span> x: x.split(<span class="st">' '</span>)[<span class="op">-</span><span class="dv">1</span>])</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>mask <span class="op">=</span> <span class="op">~</span>df_precios[<span class="st">'unidades'</span>].isin([<span class="st">"par"</span>,<span class="st">'indeterminada'</span>,<span class="st">'UI'</span>,<span class="st">'cm2'</span>,<span class="st">'noches'</span>])</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>df_precios <span class="op">=</span> df_precios[mask]</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>df_typed <span class="op">=</span> df_precios.copy()</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>df_typed[<span class="st">"tipo"</span>] <span class="op">=</span> [extraer_sujeto2(word) <span class="cf">for</span> word <span class="kw">in</span> df_typed[<span class="st">"nombre"</span>]]</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co"># df_typed["tipo"] = [extraer_tipo_producto(word) for word in df_precios["nombre"]]</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>df_typed[<span class="st">"precio"</span>] <span class="op">=</span> df_typed[<span class="st">"precio"</span>].replace([<span class="st">"</span><span class="ch">\u202f</span><span class="st">"</span>,<span class="st">" "</span>],<span class="st">""</span>, regex<span class="op">=</span><span class="va">True</span>).<span class="bu">apply</span>(<span class="kw">lambda</span> x: x.split(<span class="st">"$"</span>)[<span class="dv">0</span>]).astype(<span class="bu">int</span>)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co"># df_typed["presentacion"] = df_typed["presentacion"].replace(["\u202f"," "],"", regex=True).apply(lambda x: x.split("g")[0])</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co"># df_typed["presentacion"] = df_typed["presentacion"].replace(["\u202f"," "],"", regex=True).apply(lambda x: x.split("ml")[0])</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co"># df_typed["presentacion"] = df_typed["presentacion"].replace(["\u202f"," "],"", regex=True).apply(lambda x: x.split("unidades")[0])</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co"># df_typed["presentacion"] = df_typed["presentacion"].replace(["\u202f"," "],"", regex=True).apply(lambda x: float(x.split("k")[0]))</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>presentacion <span class="op">=</span> []</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>unidades <span class="op">=</span> []</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> df_typed[<span class="st">"presentacion"</span>]:</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> i.<span class="fu">__contains__</span>(<span class="st">'kg'</span>):</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>        i <span class="op">=</span> i.replace(<span class="st">'kg'</span>,<span class="st">''</span>)</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>        i <span class="op">=</span> i.replace(<span class="st">"</span><span class="ch">\u202f</span><span class="st">"</span>,<span class="st">""</span>)</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>        i <span class="op">=</span> i.replace(<span class="st">" "</span>,<span class="st">""</span>)</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>        i <span class="op">=</span> <span class="bu">float</span>(i)<span class="op">*</span><span class="dv">1000</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>        unidades.append(<span class="st">"g"</span>)</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>        presentacion.append(i)</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> i.<span class="fu">__contains__</span>(<span class="st">'mg'</span>):</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>        i <span class="op">=</span> i.replace(<span class="st">'mg'</span>,<span class="st">''</span>)</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>        i <span class="op">=</span> i.replace(<span class="st">"</span><span class="ch">\u202f</span><span class="st">"</span>,<span class="st">""</span>)</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>        i <span class="op">=</span> i.replace(<span class="st">" "</span>,<span class="st">""</span>)</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>        i <span class="op">=</span> <span class="bu">float</span>(i)<span class="op">/</span><span class="dv">1000</span></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>        unidades.append(<span class="st">"g"</span>)</span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>        presentacion.append(i)</span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> i.<span class="fu">__contains__</span>(<span class="st">'ml'</span>):</span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>        i <span class="op">=</span> i.replace(<span class="st">'ml'</span>,<span class="st">''</span>)</span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>        i <span class="op">=</span> i.replace(<span class="st">"</span><span class="ch">\u202f</span><span class="st">"</span>,<span class="st">""</span>)</span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>        i <span class="op">=</span> i.replace(<span class="st">" "</span>,<span class="st">""</span>)</span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>        i <span class="op">=</span> <span class="bu">float</span>(i)</span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>        unidades.append(<span class="st">"ml"</span>)</span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>        presentacion.append(i)</span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> i.<span class="fu">__contains__</span>(<span class="st">'l'</span>):</span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>        i <span class="op">=</span> i.replace(<span class="st">'l'</span>,<span class="st">''</span>)</span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>        i <span class="op">=</span> i.replace(<span class="st">"</span><span class="ch">\u202f</span><span class="st">"</span>,<span class="st">""</span>)</span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a>        i <span class="op">=</span> i.replace(<span class="st">" "</span>,<span class="st">""</span>)</span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>        i <span class="op">=</span> <span class="bu">float</span>(i)<span class="op">*</span><span class="dv">1000</span></span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a>        unidades.append(<span class="st">"ml"</span>)</span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a>        presentacion.append(i)</span>
+<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> i.<span class="fu">__contains__</span>(<span class="st">'unidades'</span>):</span>
+<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a>        i <span class="op">=</span> i.replace(<span class="st">'unidades'</span>,<span class="st">''</span>)</span>
+<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a>        i <span class="op">=</span> i.replace(<span class="st">"</span><span class="ch">\u202f</span><span class="st">"</span>,<span class="st">""</span>)</span>
+<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a>        i <span class="op">=</span> i.replace(<span class="st">" "</span>,<span class="st">""</span>)</span>
+<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a>        i <span class="op">=</span> <span class="bu">float</span>(i)</span>
+<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a>        unidades.append(<span class="st">"unidades"</span>)</span>
+<span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a>        presentacion.append(i)</span>
+<span id="cb8-52"><a href="#cb8-52" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> i.<span class="fu">__contains__</span>(<span class="st">'unidad'</span>):</span>
+<span id="cb8-53"><a href="#cb8-53" aria-hidden="true" tabindex="-1"></a>        i <span class="op">=</span> i.replace(<span class="st">'unidad'</span>,<span class="st">''</span>)</span>
+<span id="cb8-54"><a href="#cb8-54" aria-hidden="true" tabindex="-1"></a>        i <span class="op">=</span> i.replace(<span class="st">"</span><span class="ch">\u202f</span><span class="st">"</span>,<span class="st">""</span>)</span>
+<span id="cb8-55"><a href="#cb8-55" aria-hidden="true" tabindex="-1"></a>        i <span class="op">=</span> i.replace(<span class="st">" "</span>,<span class="st">""</span>)</span>
+<span id="cb8-56"><a href="#cb8-56" aria-hidden="true" tabindex="-1"></a>        i <span class="op">=</span> <span class="bu">float</span>(i)</span>
+<span id="cb8-57"><a href="#cb8-57" aria-hidden="true" tabindex="-1"></a>        unidades.append(<span class="st">"unidades"</span>)</span>
+<span id="cb8-58"><a href="#cb8-58" aria-hidden="true" tabindex="-1"></a>        presentacion.append(i)</span>
+<span id="cb8-59"><a href="#cb8-59" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> i.<span class="fu">__contains__</span>(<span class="st">'g'</span>):</span>
+<span id="cb8-60"><a href="#cb8-60" aria-hidden="true" tabindex="-1"></a>        i <span class="op">=</span> i.replace(<span class="st">'g'</span>,<span class="st">''</span>)</span>
+<span id="cb8-61"><a href="#cb8-61" aria-hidden="true" tabindex="-1"></a>        i <span class="op">=</span> i.replace(<span class="st">"</span><span class="ch">\u202f</span><span class="st">"</span>,<span class="st">""</span>)</span>
+<span id="cb8-62"><a href="#cb8-62" aria-hidden="true" tabindex="-1"></a>        i <span class="op">=</span> i.replace(<span class="st">" "</span>,<span class="st">""</span>)</span>
+<span id="cb8-63"><a href="#cb8-63" aria-hidden="true" tabindex="-1"></a>        i <span class="op">=</span> <span class="bu">float</span>(i)</span>
+<span id="cb8-64"><a href="#cb8-64" aria-hidden="true" tabindex="-1"></a>        unidades.append(<span class="st">"g"</span>)</span>
+<span id="cb8-65"><a href="#cb8-65" aria-hidden="true" tabindex="-1"></a>        presentacion.append(i)</span>
+<span id="cb8-66"><a href="#cb8-66" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> i.<span class="fu">__contains__</span>(<span class="st">'m'</span>):</span>
+<span id="cb8-67"><a href="#cb8-67" aria-hidden="true" tabindex="-1"></a>        i <span class="op">=</span> i.replace(<span class="st">'m'</span>,<span class="st">''</span>)</span>
+<span id="cb8-68"><a href="#cb8-68" aria-hidden="true" tabindex="-1"></a>        i <span class="op">=</span> i.replace(<span class="st">"</span><span class="ch">\u202f</span><span class="st">"</span>,<span class="st">""</span>)</span>
+<span id="cb8-69"><a href="#cb8-69" aria-hidden="true" tabindex="-1"></a>        i <span class="op">=</span> i.replace(<span class="st">" "</span>,<span class="st">""</span>)</span>
+<span id="cb8-70"><a href="#cb8-70" aria-hidden="true" tabindex="-1"></a>        i <span class="op">=</span> <span class="bu">float</span>(i)</span>
+<span id="cb8-71"><a href="#cb8-71" aria-hidden="true" tabindex="-1"></a>        unidades.append(<span class="st">"m"</span>)</span>
+<span id="cb8-72"><a href="#cb8-72" aria-hidden="true" tabindex="-1"></a>        presentacion.append(i)</span>
+<span id="cb8-73"><a href="#cb8-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-74"><a href="#cb8-74" aria-hidden="true" tabindex="-1"></a>df_typed[<span class="st">"presentacion"</span>] <span class="op">=</span> presentacion</span>
+<span id="cb8-75"><a href="#cb8-75" aria-hidden="true" tabindex="-1"></a>df_typed[<span class="st">"unidades"</span>] <span class="op">=</span> unidades</span>
+<span id="cb8-76"><a href="#cb8-76" aria-hidden="true" tabindex="-1"></a>df_typed <span class="op">=</span> df_typed[df_typed[<span class="st">"tipo"</span>].<span class="bu">apply</span>(<span class="bu">type</span>) <span class="op">!=</span> <span class="bu">type</span>(<span class="va">None</span>)]</span>
+<span id="cb8-77"><a href="#cb8-77" aria-hidden="true" tabindex="-1"></a>df_typed[<span class="st">"marca"</span>][df_typed[<span class="st">"marca"</span>].<span class="bu">str</span>.contains(<span class="st">'del '</span>)] <span class="op">=</span> df_typed[<span class="st">"marca"</span>][df_typed[<span class="st">"marca"</span>].<span class="bu">str</span>.contains(<span class="st">'del '</span>)].<span class="bu">str</span>.replace(<span class="st">'del '</span>,<span class="st">''</span>)</span>
+<span id="cb8-78"><a href="#cb8-78" aria-hidden="true" tabindex="-1"></a>df_typed[<span class="st">"marca"</span>][df_typed[<span class="st">"marca"</span>].<span class="bu">str</span>.contains(<span class="st">'Del '</span>)] <span class="op">=</span> df_typed[<span class="st">"marca"</span>][df_typed[<span class="st">"marca"</span>].<span class="bu">str</span>.contains(<span class="st">'Del '</span>)].<span class="bu">str</span>.replace(<span class="st">'Del '</span>,<span class="st">''</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/tmp/ipykernel_73881/2750414493.py:76: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df_typed["marca"][df_typed["marca"].str.contains('del ')] = df_typed["marca"][df_typed["marca"].str.contains('del ')].str.replace('del ','')
+/tmp/ipykernel_73881/2750414493.py:77: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df_typed["marca"][df_typed["marca"].str.contains('Del ')] = df_typed["marca"][df_typed["marca"].str.contains('Del ')].str.replace('Del ','')</code></pre>
+</div>
+</div>
+<p>Se extraen los elementos de <em>unidades de medida</em> desde la <strong>presentación</strong> y se eliminan aquellas unidades que no aportan valor al análisis ya que son productos no contemplados en el actual proyecto, algunas unidades de medición que se excluyeron son: “par”,‘indeterminada’,‘UI’,‘cm2’,‘noches’. adicionalmente se implementa una estrategia de <strong>análisis no supervisado</strong> para extraer los sustantivos del <strong>nombre</strong> del producto y poder saber de que <em>tipo</em> de producto en cuestión estamos hablando, la estrategia usada corresponde a <strong><em>tokenización</em></strong> y <strong><em>etiquetado</em></strong> para cada una de las palabras en el nombre del producto con el fin de extraer los sustantivos mediante la librería <code>spacy</code>.</p>
+<p>Posteriormente se realiza la rutina de limpieza a los <strong>precios</strong> con el fin de eliminar el símbolo “$” y los espacios en blanco convirtiendo esta variable en un valor <code>int</code>.</p>
+<p>Por ultimo se llevan todas las unidades de medida a una misma escala, se depuran espacios en blanco y se guarda la variable en formato <code>float</code>, finalmente se eliminan los elementos <code>NoneType</code> para poder realizar los análisis pertinentes.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> openai</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> openai <span class="im">import</span> OpenAI</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> clasificar_producto(producto):</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Para ejecutar esta parte del codigo es necesario crear una clave de API para OpenAI y agregarla al modelo</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>        <span class="co"># client = OpenAI(api_key = 'Clave API')</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>        client <span class="op">=</span> OpenAI()</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>        completion <span class="op">=</span> client.chat.completions.create(</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>          model<span class="op">=</span><span class="st">"gpt-4-1106-preview"</span>,</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>          <span class="co"># model='gpt-3.5-turbo-1106',</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>          messages<span class="op">=</span>[</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>            {<span class="st">"role"</span>: <span class="st">"system"</span>, <span class="st">"content"</span>: <span class="st">"Menciona unicamente una de las siguientes categorias: 'Alimentos Frescos', 'Alimentos Secos y Enlatados', 'Bebidas', 'Snacks y Golosinas', 'Productos de Panadería y Cereal', 'Congelados', 'Productos de Limpieza y Hogar', 'Cuidado Personal', 'Productos para Bebés', 'Productos de Salud y Farmacia', 'Otros Artículos de Cocina y Hogar', 'Mascotas', 'No Aplica','Bebidas Alcoholicas'"</span>},</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>            {<span class="st">"role"</span>: <span class="st">"user"</span>, <span class="st">"content"</span>: <span class="ss">f"Dime unicamente la categoría del siguiente producto: '</span><span class="sc">{</span>producto<span class="sc">}</span><span class="ss">'"</span>}</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>          ]</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> completion.choices[<span class="dv">0</span>].message.content</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> e:</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Error al clasificar el producto </span><span class="sc">{</span>producto<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>e<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">None</span></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Lista de tus productos</span></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>productos <span class="op">=</span> df_typed[<span class="st">"tipo"</span>].unique()</span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>grupos <span class="op">=</span> {}</span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>i <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>dur <span class="op">=</span>[]</span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="bu">len</span>(productos)</span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> producto <span class="kw">in</span> productos:</span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>  start <span class="op">=</span> time.time()</span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>  grupo <span class="op">=</span> clasificar_producto(producto)</span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>  end <span class="op">=</span> time.time()</span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>  dur.append(end<span class="op">-</span>start)</span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>  grupos[producto]<span class="op">=</span>grupo</span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> i<span class="op">%</span><span class="dv">20</span> <span class="op">==</span> <span class="dv">0</span> <span class="kw">or</span> i <span class="op">==</span> n:</span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>n<span class="sc">}</span><span class="ss"> faltan </span><span class="sc">{</span>dur[<span class="op">-</span><span class="dv">1</span>]<span class="sc">:.2f}</span><span class="ss"> s/t </span><span class="sc">{</span>np<span class="sc">.</span>mean(dur)<span class="op">*</span>(n<span class="op">-</span>i)<span class="op">/</span><span class="dv">60</span><span class="sc">:.2f}</span><span class="ss">min"</span>)</span>
+<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a>  i <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a>df_grupos <span class="op">=</span> pd.DataFrame(grupos, index<span class="op">=</span>[<span class="st">"grupo"</span>]).transpose()</span>
+<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a>df_grupos.reset_index(inplace <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a>df_grupos.columns<span class="op">=</span> [<span class="st">"tipo"</span>,<span class="st">"grupo"</span>]</span>
+<span id="cb10-46"><a href="#cb10-46" aria-hidden="true" tabindex="-1"></a><span class="co"># df_grupos.to_csv('grupos.csv')</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Debido a que al realizar el filtrado de tipo de producto quedan 570 tipos distintos, es necesario buscar una forma de agrupación de estos productos, ya que los valores de precio y presentación no nos servirán para hacer un análisis supervisado de esta manera se plantea el uso de la API de OpenAI con el motor GPT-4 para la identificación y categorización de los tipos de producto antes depurados.</p>
+<div class="cell" data-execution_count="786">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>df_grupos[<span class="st">"grupo"</span>] <span class="op">=</span> df_grupos[<span class="st">"grupo"</span>].<span class="bu">str</span>.replace(<span class="st">'.'</span>, <span class="st">''</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>df_grupos[<span class="st">"grupo"</span>] <span class="op">=</span> df_grupos[<span class="st">"grupo"</span>].<span class="bu">str</span>.replace(<span class="st">"'"</span>, <span class="st">''</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>df_grupos[<span class="st">"grupo"</span>].unique()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="786">
+<pre><code>array(['Alimentos Frescos', 'Productos de Salud y Farmacia',
+       'Productos de Panadería y Cereal', 'Alimentos Secos y Enlatados',
+       'Productos de Limpieza y Hogar',
+       'Otros Artículos de Cocina y Hogar', 'Snacks y Golosinas',
+       'Bebidas Alcohólicas', 'Congelados', 'Bebidas', 'No Aplica',
+       'Mascotas', 'Productos para Bebés'], dtype=object)</code></pre>
+</div>
+</div>
+<p>Logramos reducir 570 tipos de productos 13 grupos distintos quedando con un total de 9527 items no obstante ya que el algoritmo en la práctica no tiene una efectividad total es necesario hacer algunas correcciones, estas a termino práctico se hicieron a través de tanteo</p>
+<div class="cell" data-execution_count="706">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>df_complete <span class="op">=</span> pd.merge(left<span class="op">=</span>df_typed, right<span class="op">=</span>(df_grupos), on <span class="op">=</span> <span class="st">"tipo"</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>df_filtered <span class="op">=</span> df_complete[df_complete[<span class="st">"grupo"</span>] <span class="op">!=</span> <span class="st">'No Aplica'</span>][df_complete[<span class="st">"grupo"</span>] <span class="op">!=</span> <span class="st">'Productos de Salud y Farmacia'</span>]</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>df_filtered.loc[<span class="dv">9485</span>][<span class="st">"grupo"</span>] <span class="op">=</span> <span class="st">'Mascotas'</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>mask <span class="op">=</span> df_filtered[<span class="st">'nombre'</span>].<span class="bu">str</span>.contains(<span class="st">'Papas Fritas'</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>df_filtered.loc[mask, <span class="st">'tipo'</span>] <span class="op">=</span> <span class="st">'Papas Fritas'</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>df_filtered.loc[mask, <span class="st">'grupo'</span>] <span class="op">=</span> <span class="st">'Snacks y Golosinas'</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>mask <span class="op">=</span> df_filtered[<span class="st">'nombre'</span>].<span class="bu">str</span>.contains(<span class="st">'Cong'</span>)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>df_filtered.loc[mask, <span class="st">'grupo'</span>] <span class="op">=</span> <span class="st">'Congelados'</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>mask <span class="op">=</span> df_filtered[<span class="st">'nombre'</span>].<span class="bu">str</span>.contains(<span class="st">'Francesa'</span>)</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>df_filtered.loc[mask, <span class="st">'tipo'</span>] <span class="op">=</span> <span class="st">'Papas a la Francesa'</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="co"># df_filtered.loc[mask]</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="co"># df_filtered = df_filtered.copy()</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>display(df_filtered.grupo.unique())</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>mask <span class="op">=</span> df_filtered[<span class="st">'nombre'</span>].<span class="bu">str</span>.contains(<span class="st">'Alimento para Perros'</span>)</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>df_filtered.loc[mask, <span class="st">'tipo'</span>] <span class="op">=</span> <span class="st">'Alimento para Perros'</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>df_filtered.loc[mask, <span class="st">'grupo'</span>] <span class="op">=</span> <span class="st">'Mascotas'</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>mask <span class="op">=</span> df_filtered[<span class="st">'nombre'</span>].<span class="bu">str</span>.contains(<span class="st">'Alimento para Gatos'</span>)</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>df_filtered.loc[mask, <span class="st">'tipo'</span>] <span class="op">=</span> <span class="st">'Alimento para Gatos'</span></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>df_filtered.loc[mask, <span class="st">'grupo'</span>] <span class="op">=</span> <span class="st">'Mascotas'</span></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>mask <span class="op">=</span> df_filtered[<span class="st">'nombre'</span>].<span class="bu">str</span>.contains(<span class="st">'Alimento Húmedo para Perros'</span>)</span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>df_filtered.loc[mask, <span class="st">'tipo'</span>] <span class="op">=</span> <span class="st">'Alimento Húmedo para Perros'</span></span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>df_filtered.loc[mask, <span class="st">'grupo'</span>] <span class="op">=</span> <span class="st">'Mascotas'</span></span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>mask <span class="op">=</span> df_filtered[<span class="st">'nombre'</span>].<span class="bu">str</span>.contains(<span class="st">'Alimento Húmedo para Gatos'</span>)</span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>df_filtered.loc[mask, <span class="st">'tipo'</span>] <span class="op">=</span> <span class="st">'Alimento Húmedo para Gatos'</span></span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>df_filtered.loc[mask, <span class="st">'grupo'</span>] <span class="op">=</span> <span class="st">'Mascotas'</span></span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>mask <span class="op">=</span> df_filtered[<span class="st">'nombre'</span>].<span class="bu">str</span>.contains(<span class="st">'Alimento Seco para Gatos'</span>)</span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>df_filtered.loc[mask, <span class="st">'tipo'</span>] <span class="op">=</span> <span class="st">'Alimento para Gatos'</span></span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>df_filtered.loc[mask, <span class="st">'grupo'</span>] <span class="op">=</span> <span class="st">'Mascotas'</span></span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>mask <span class="op">=</span> df_filtered[<span class="st">'nombre'</span>].<span class="bu">str</span>.contains(<span class="st">'Alimento para Peces'</span>)</span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>df_filtered.loc[mask, <span class="st">'tipo'</span>] <span class="op">=</span> <span class="st">'Alimento para Peces'</span></span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>df_filtered.loc[mask, <span class="st">'grupo'</span>] <span class="op">=</span> <span class="st">'Mascotas'</span></span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>mask <span class="op">=</span> df_filtered[<span class="st">'nombre'</span>].<span class="bu">str</span>.contains(<span class="st">'Alimento para Aves'</span>)</span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>df_filtered.loc[mask, <span class="st">'tipo'</span>] <span class="op">=</span> <span class="st">'Alimento para Aves'</span></span>
+<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a>df_filtered.loc[mask, <span class="st">'grupo'</span>] <span class="op">=</span> <span class="st">'Mascotas'</span></span>
+<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/tmp/ipykernel_73881/3570886134.py:2: UserWarning: Boolean Series key will be reindexed to match DataFrame index.
+  df_filtered = df_complete[df_complete["grupo"] != 'No Aplica'][df_complete["grupo"] != 'Productos de Salud y Farmacia']
+/tmp/ipykernel_73881/3570886134.py:3: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df_filtered.loc[9485]["grupo"] = 'Mascotas'</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>array(['Alimentos Frescos', 'Productos de Panadería y Cereal',
+       'Alimentos Secos y Enlatados', 'Congelados', 'Snacks y Golosinas',
+       'Productos de Limpieza y Hogar',
+       'Otros Artículos de Cocina y Hogar', 'Bebidas Alcohólicas',
+       'Bebidas', 'Productos para Bebés', 'Mascotas'], dtype=object)</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="707">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>display(df_filtered.describe())</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>display(df_filtered.info())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">presentacion</th>
+<th data-quarto-table-cell-role="th">precio</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">count</td>
+<td>9308.000000</td>
+<td>9308.000000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">mean</td>
+<td>662.405307</td>
+<td>14464.914375</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">std</td>
+<td>1137.160289</td>
+<td>28341.110731</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">min</td>
+<td>1.000000</td>
+<td>100.000000</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">25%</td>
+<td>156.000000</td>
+<td>3820.000000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">50%</td>
+<td>350.000000</td>
+<td>7330.000000</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">75%</td>
+<td>750.000000</td>
+<td>14450.000000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">max</td>
+<td>24000.000000</td>
+<td>968700.000000</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
+Index: 9308 entries, 0 to 9613
+Data columns (total 8 columns):
+ #   Column        Non-Null Count  Dtype  
+---  ------        --------------  -----  
+ 0   nombre        9308 non-null   object 
+ 1   marca         9308 non-null   object 
+ 2   presentacion  9308 non-null   float64
+ 3   precio        9308 non-null   int64  
+ 4   lugar         9308 non-null   object 
+ 5   unidades      9308 non-null   object 
+ 6   tipo          9308 non-null   object 
+ 7   grupo         9308 non-null   object 
+dtypes: float64(1), int64(1), object(6)
+memory usage: 912.5+ KB</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>None</code></pre>
+</div>
+</div>
+<p>Observamos que posterior al ajuste las variables de precio y presentación ya son variables númericas siendo tipo <code>int</code> y <code>float</code> respectivamente por lo tanto ya podemos realizar un análisis númerico a los datos.</p>
+<div class="cell" data-execution_count="708">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>pp <span class="op">=</span> sns.pairplot(df_filtered, hue <span class="op">=</span> <span class="st">"lugar"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Listas_precios_files/figure-html/cell-12-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="709">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>sns.catplot(df_filtered,y <span class="op">=</span> <span class="st">'presentacion'</span>, hue<span class="op">=</span><span class="st">'lugar'</span>, kind<span class="op">=</span><span class="st">'box'</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>sns.catplot(df_filtered,y <span class="op">=</span> <span class="st">'precio'</span>, hue<span class="op">=</span><span class="st">'lugar'</span>, kind<span class="op">=</span><span class="st">'box'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Listas_precios_files/figure-html/cell-13-output-1.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Listas_precios_files/figure-html/cell-13-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Observamos presencia de outliers en los datos principalmente para los almacenes Éxito y Jumbo por lo que uno de los posibles tratamientos explorados será la transformación logaritmica, ya que en su mayoría son datos de menor valor. Entes de realizar la transformación observemos que si existen diferencias en las en los precios de distintas categorías de los productos outlier vs los productos que se encuentran en la normalidad.</p>
+<div class="cell" data-execution_count="710">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>sns.pairplot(df_filtered,hue<span class="op">=</span><span class="st">"grupo"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Listas_precios_files/figure-html/cell-14-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="711">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>sns.catplot(df_filtered,y <span class="op">=</span> <span class="st">'presentacion'</span>, hue<span class="op">=</span><span class="st">'grupo'</span>, kind<span class="op">=</span><span class="st">'box'</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>sns.catplot(df_filtered,y <span class="op">=</span> <span class="st">'precio'</span>, hue<span class="op">=</span><span class="st">'grupo'</span>, kind<span class="op">=</span><span class="st">'box'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Listas_precios_files/figure-html/cell-15-output-1.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Listas_precios_files/figure-html/cell-15-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Al observar los valores de precio y presentación observamos que ambas tienen una tendencia a tener outliers por lo que una manera de ajustarlos puede ser con una conversión logaritmica, para poder visualizarlos de una mejor manera, observamos también que una de las categorías con mayor precios corresponde a bebidas alcoholicas.</p>
+<div class="cell" data-execution_count="712">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>pp <span class="op">=</span> sns.pairplot(df_filtered, hue <span class="op">=</span> <span class="st">"lugar"</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax <span class="kw">in</span> pp.axes.flat:</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    ax.<span class="bu">set</span>(xscale <span class="op">=</span> <span class="st">'log'</span>,yscale <span class="op">=</span> <span class="st">'log'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Listas_precios_files/figure-html/cell-16-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="713">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>sns.catplot(df_filtered,y <span class="op">=</span> <span class="st">'presentacion'</span>, hue<span class="op">=</span><span class="st">'lugar'</span>, kind<span class="op">=</span><span class="st">'box'</span>, log_scale<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>sns.catplot(df_filtered,y <span class="op">=</span> <span class="st">'precio'</span>, hue<span class="op">=</span><span class="st">'lugar'</span>, kind<span class="op">=</span><span class="st">'box'</span>, log_scale<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Listas_precios_files/figure-html/cell-17-output-1.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Listas_precios_files/figure-html/cell-17-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="714">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>sns.catplot(df_filtered, y <span class="op">=</span> <span class="st">"precio"</span>,hue<span class="op">=</span><span class="st">'grupo'</span>, log_scale<span class="op">=</span><span class="va">True</span>,kind<span class="op">=</span><span class="st">'violin'</span> )</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>sns.catplot(df_filtered, y <span class="op">=</span> <span class="st">"presentacion"</span>,hue<span class="op">=</span><span class="st">'grupo'</span>, log_scale<span class="op">=</span><span class="va">True</span> ,kind<span class="op">=</span><span class="st">'violin'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Listas_precios_files/figure-html/cell-18-output-1.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Listas_precios_files/figure-html/cell-18-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Vemos que con el ajuste de escala logarítmica los datos presentan una mejor dispersión, sin embargo aun sigue habiendo presencia de outliers para precios y presentaciones. Podemos generar escalas de costo de producto para los quantiles 0.25, 0.5, 0.75 de cada grupo</p>
+<div class="cell" data-execution_count="715">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Definir una función para calcular los cuantiles dentro de cada grupo</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calcular_cuantiles_grupo(df, columna_precio, cuantiles):</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Agrupa por la columna de grupo</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>    grupos <span class="op">=</span> df.groupby(<span class="st">'grupo'</span>)</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Diccionario para almacenar los cuantiles por grupo</span></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>    cuantiles_por_grupo <span class="op">=</span> {}</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> nombre_grupo, grupo <span class="kw">in</span> grupos:</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>        cuantiles_grupo <span class="op">=</span> {}</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> q <span class="kw">in</span> cuantiles:</span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>            cuantiles_grupo[q] <span class="op">=</span> grupo[columna_precio].quantile(q)</span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>        cuantiles_por_grupo[nombre_grupo] <span class="op">=</span> cuantiles_grupo</span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> cuantiles_por_grupo</span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Definir los cuantiles que deseas calcular, por ejemplo: 25%, 50%, 75%</span></span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a>cuantiles <span class="op">=</span> [<span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>]</span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Calcular los cuantiles para cada grupo</span></span>
+<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a>cuantiles_grupos <span class="op">=</span> calcular_cuantiles_grupo(df_filtered, <span class="st">'precio'</span>, cuantiles)</span>
+<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-26"><a href="#cb26-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Ahora puedes usar 'cuantiles_grupos' para categorizar precios dentro de cada grupo</span></span>
+<span id="cb26-27"><a href="#cb26-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Aquí hay un ejemplo de cómo podrías hacer esto:</span></span>
+<span id="cb26-28"><a href="#cb26-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-29"><a href="#cb26-29" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> categorizar_precio_grupo(row, cuantiles_grupos):</span>
+<span id="cb26-30"><a href="#cb26-30" aria-hidden="true" tabindex="-1"></a>    grupo <span class="op">=</span> row[<span class="st">'grupo'</span>]</span>
+<span id="cb26-31"><a href="#cb26-31" aria-hidden="true" tabindex="-1"></a>    precio <span class="op">=</span> row[<span class="st">'precio'</span>]</span>
+<span id="cb26-32"><a href="#cb26-32" aria-hidden="true" tabindex="-1"></a>    cuantiles <span class="op">=</span> cuantiles_grupos[grupo]</span>
+<span id="cb26-33"><a href="#cb26-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-34"><a href="#cb26-34" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> precio <span class="op">&lt;=</span> cuantiles[<span class="fl">0.25</span>]:</span>
+<span id="cb26-35"><a href="#cb26-35" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">'Bajo'</span></span>
+<span id="cb26-36"><a href="#cb26-36" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> precio <span class="op">&lt;=</span> cuantiles[<span class="fl">0.5</span>]:</span>
+<span id="cb26-37"><a href="#cb26-37" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">'Medio'</span></span>
+<span id="cb26-38"><a href="#cb26-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> precio <span class="op">&lt;=</span> cuantiles[<span class="fl">0.75</span>]:</span>
+<span id="cb26-39"><a href="#cb26-39" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">'Medio-Alto'</span></span>
+<span id="cb26-40"><a href="#cb26-40" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb26-41"><a href="#cb26-41" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">'Alto'</span></span>
+<span id="cb26-42"><a href="#cb26-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-43"><a href="#cb26-43" aria-hidden="true" tabindex="-1"></a><span class="co"># Aplicar la función de categorización al DataFrame</span></span>
+<span id="cb26-44"><a href="#cb26-44" aria-hidden="true" tabindex="-1"></a>df_filtered[<span class="st">'categoria_precio'</span>] <span class="op">=</span> df_filtered.<span class="bu">apply</span>(<span class="kw">lambda</span> row: categorizar_precio_grupo(row, cuantiles_grupos), axis<span class="op">=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="502">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>sns.catplot(df_filtered, y <span class="op">=</span> <span class="st">'precio'</span>, kind<span class="op">=</span><span class="st">'box'</span>, hue<span class="op">=</span><span class="st">'grupo'</span>, col<span class="op">=</span><span class="st">'categoria_precio'</span>,log_scale<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Listas_precios_files/figure-html/cell-20-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="optimización-de-lista-de-precios" class="level2">
+<h2 class="anchored" data-anchor-id="optimización-de-lista-de-precios">Optimización de Lista de Precios</h2>
+<p>Al realizar un analisis para la optimización de listas de precios intentamos determinar la forma más eficiente y costo-efectiva de comprar una serie de productos deseados dentro de un presupuesto específico, considerando diversos factores como el precio de los productos, la disponibilidad en distintos almacenes y los costos adicionales asociados con el desplazamiento entre estos almacenes. El objetivo principal es maximizar la cantidad de productos adquiridos o cumplir de la mejor manera posible con una lista de compras predefinida, respetando el límite presupuestario. A continuación, Generamos una Lista de productos aleatoria, que representará la necesidad puntual de algunos productos realizadas por un usuario.</p>
+<div class="cell" data-execution_count="644">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>tipos_seleccionados <span class="op">=</span> df_filtered.tipo.sample(<span class="dv">40</span>).unique()</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>df_lista <span class="op">=</span> pd.DataFrame()</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> tipos_seleccionados:</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>    df_lista <span class="op">=</span> pd.concat([df_lista,df_filtered[df_filtered[<span class="st">"tipo"</span>]<span class="op">==</span>i].sample()])</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>df_list <span class="op">=</span> df_lista[[<span class="st">"tipo"</span>,<span class="st">'grupo'</span>,<span class="st">'presentacion'</span>,<span class="st">'unidades'</span>]].sort_values(<span class="st">'grupo'</span>)</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>df_list <span class="op">=</span> df_list.reset_index().drop(<span class="st">'index'</span>, axis <span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>df_list</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="644">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">tipo</th>
+<th data-quarto-table-cell-role="th">grupo</th>
+<th data-quarto-table-cell-role="th">presentacion</th>
+<th data-quarto-table-cell-role="th">unidades</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>Pulpa</td>
+<td>Alimentos Frescos</td>
+<td>230.0</td>
+<td>g</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>Huevos</td>
+<td>Alimentos Frescos</td>
+<td>12.0</td>
+<td>unidades</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>Morrillo</td>
+<td>Alimentos Frescos</td>
+<td>1000.0</td>
+<td>g</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>Leche</td>
+<td>Alimentos Frescos</td>
+<td>180.0</td>
+<td>g</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>Contramuslos</td>
+<td>Alimentos Frescos</td>
+<td>1500.0</td>
+<td>g</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5</td>
+<td>Tostadas</td>
+<td>Alimentos Secos y Enlatados</td>
+<td>150.0</td>
+<td>g</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">6</td>
+<td>Salsa</td>
+<td>Alimentos Secos y Enlatados</td>
+<td>350.0</td>
+<td>g</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">7</td>
+<td>Fríjoles</td>
+<td>Alimentos Secos y Enlatados</td>
+<td>458.0</td>
+<td>g</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">8</td>
+<td>Soya</td>
+<td>Alimentos Secos y Enlatados</td>
+<td>400.0</td>
+<td>g</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">9</td>
+<td>Miel</td>
+<td>Alimentos Secos y Enlatados</td>
+<td>345.0</td>
+<td>g</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">10</td>
+<td>Macadamias</td>
+<td>Alimentos Secos y Enlatados</td>
+<td>250.0</td>
+<td>g</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">11</td>
+<td>Macarrones</td>
+<td>Alimentos Secos y Enlatados</td>
+<td>53.0</td>
+<td>g</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">12</td>
+<td>Jugo</td>
+<td>Bebidas</td>
+<td>1890.0</td>
+<td>ml</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">13</td>
+<td>Refresco</td>
+<td>Bebidas</td>
+<td>1000.0</td>
+<td>ml</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">14</td>
+<td>Té</td>
+<td>Bebidas</td>
+<td>350.0</td>
+<td>ml</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">15</td>
+<td>Aromática</td>
+<td>Bebidas</td>
+<td>20.0</td>
+<td>g</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">16</td>
+<td>Vino</td>
+<td>Bebidas Alcohólicas</td>
+<td>750.0</td>
+<td>ml</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">17</td>
+<td>Licor</td>
+<td>Bebidas Alcohólicas</td>
+<td>750.0</td>
+<td>ml</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">18</td>
+<td>Alimento para Perros</td>
+<td>Mascotas</td>
+<td>4000.0</td>
+<td>g</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">19</td>
+<td>Vela</td>
+<td>Productos de Limpieza y Hogar</td>
+<td>113.0</td>
+<td>g</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">20</td>
+<td>Cera</td>
+<td>Productos de Limpieza y Hogar</td>
+<td>1000.0</td>
+<td>ml</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">21</td>
+<td>Detergente</td>
+<td>Productos de Limpieza y Hogar</td>
+<td>3900.0</td>
+<td>ml</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">22</td>
+<td>Repuesto</td>
+<td>Productos de Limpieza y Hogar</td>
+<td>250.0</td>
+<td>ml</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">23</td>
+<td>Paños</td>
+<td>Productos de Limpieza y Hogar</td>
+<td>120.0</td>
+<td>unidades</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">24</td>
+<td>Esponja</td>
+<td>Productos de Limpieza y Hogar</td>
+<td>3.0</td>
+<td>unidades</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">25</td>
+<td>Cereal</td>
+<td>Productos de Panadería y Cereal</td>
+<td>240.0</td>
+<td>g</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">26</td>
+<td>Pan</td>
+<td>Productos de Panadería y Cereal</td>
+<td>500.0</td>
+<td>g</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">27</td>
+<td>Nachos</td>
+<td>Snacks y Golosinas</td>
+<td>180.0</td>
+<td>g</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">28</td>
+<td>Pistachos</td>
+<td>Snacks y Golosinas</td>
+<td>35.0</td>
+<td>g</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">29</td>
+<td>Galletas</td>
+<td>Snacks y Golosinas</td>
+<td>432.0</td>
+<td>g</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">30</td>
+<td>Gomas</td>
+<td>Snacks y Golosinas</td>
+<td>90.0</td>
+<td>g</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">31</td>
+<td>Palomitas</td>
+<td>Snacks y Golosinas</td>
+<td>160.0</td>
+<td>g</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">32</td>
+<td>Pasabocas</td>
+<td>Snacks y Golosinas</td>
+<td>300.0</td>
+<td>g</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">33</td>
+<td>Bocadillos</td>
+<td>Snacks y Golosinas</td>
+<td>250.0</td>
+<td>g</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Se obtinen los productos, por lo que ahora resta maximizar la cantidad de unidades obtenidas de esta lista de productos, manteniendo el gasto total dentro de un presupuesto fijo a Continuación exploraremos dos opciones.</p>
+<section id="planteamiento-del-algoritmo-heurístico" class="level3">
+<h3 class="anchored" data-anchor-id="planteamiento-del-algoritmo-heurístico">Planteamiento del Algoritmo Heurístico:</h3>
+<p>El objetivo del algoritmo es minimizar el costo total de comprar una lista de productos, encontrando para cada producto la opción más barata que cumpla o exceda la presentación deseada.</p>
+<ol type="1">
+<li><strong>Conjunto de Datos:</strong>
+<ul>
+<li><code>data</code>: DataFrame que contiene información sobre productos disponibles, incluyendo tipo, precio, presentación y unidades.</li>
+<li><code>lista_productos_expandida</code>: DataFrame que enumera los productos deseados, incluyendo el tipo, la presentación deseada y las unidades.</li>
+</ul></li>
+<li><strong>Variables:</strong>
+<ul>
+<li>No hay variables de decisión en el sentido tradicional de la programación lineal. En su lugar, para cada producto deseado, el algoritmo busca en el conjunto de datos <code>data</code> para encontrar la opción más barata.</li>
+</ul></li>
+<li><strong>Proceso de Optimización:</strong>
+<ul>
+<li>Para cada producto en <code>lista_productos_expandida</code>:
+<ul>
+<li>Se filtra <code>data</code> para encontrar todas las opciones disponibles de ese tipo de producto y unidad.</li>
+<li>Se busca la presentación exacta del producto. Si está disponible, se elige la opción más barata.</li>
+<li>Si la presentación exacta no está disponible, se buscan opciones con presentaciones más pequeñas. El algoritmo calcula el costo total de comprar múltiples unidades de estas opciones para alcanzar o superar la presentación deseada. Se elige la opción con el menor costo total.</li>
+</ul></li>
+</ul></li>
+<li><strong>Función Objetiva:</strong>
+<ul>
+<li>Minimizar el costo total de comprar los productos en <code>lista_productos_expandida</code>, seleccionando para cada producto la opción más barata que cumpla o exceda la presentación deseada.</li>
+</ul></li>
+<li><strong>Restricciones:</strong>
+<ul>
+<li>Cada producto comprado debe cumplir o superar la presentación deseada especificada en <code>lista_productos_expandida</code>.</li>
+<li>Si no hay opciones disponibles que cumplan con la presentación deseada, el producto puede ser excluido o se puede buscar una solución alternativa.</li>
+</ul></li>
+<li><strong>Salida del Algoritmo:</strong>
+<ul>
+<li>Una lista (<code>resultados_optimizacion</code>) que contiene los productos seleccionados, cada uno con su precio y cantidad, representando la opción más barata para alcanzar la presentación deseada.</li>
+</ul></li>
+</ol>
+<p>El algoritmo depende de la disponibilidad y los precios de los productos en el conjunto de datos <code>data</code>, y busca la solución más económica para cada producto individualmente, en lugar de optimizar el conjunto completo de compras simultáneamente.</p>
+<div class="cell" data-execution_count="787">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> df_filtered.copy()</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">"ignore"</span>, category<span class="op">=</span><span class="pp">DeprecationWarning</span>)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>lista_productos_expandida <span class="op">=</span> df_list.copy()</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Función para encontrar la opción más barata para un producto dado</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> encontrar_opcion_mas_barata(tipo_producto, presentacion_deseada, unidad):</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Filtrando el dataset para encontrar opciones del producto</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>    opciones_producto <span class="op">=</span> data[(data[<span class="st">'tipo'</span>] <span class="op">==</span> tipo_producto) <span class="op">&amp;</span> (data[<span class="st">'unidades'</span>] <span class="op">==</span> unidad)]</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Verificando si existe la presentación exacta</span></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>    presentacion_exacta <span class="op">=</span> opciones_producto[opciones_producto[<span class="st">'presentacion'</span>] <span class="op">==</span> presentacion_deseada]</span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> presentacion_exacta.empty:</span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>        producto_mas_barato <span class="op">=</span> presentacion_exacta.loc[presentacion_exacta[<span class="st">'precio'</span>].idxmin()]</span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>        producto_mas_barato[<span class="st">'cantidad'</span>] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> producto_mas_barato, producto_mas_barato[<span class="st">'precio'</span>]</span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Si no, buscando opciones con presentacion más pequeñas</span></span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>        opciones_posibles <span class="op">=</span> opciones_producto[opciones_producto[<span class="st">'presentacion'</span>] <span class="op">&lt;</span> presentacion_deseada]</span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> opciones_posibles.empty:</span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="va">None</span>, <span class="va">None</span></span>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Calculando el costo de comprar múltiples unidades para alcanzar la presentación deseada</span></span>
+<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a>        opciones_posibles[<span class="st">'costo_total'</span>] <span class="op">=</span> opciones_posibles[<span class="st">'precio'</span>] <span class="op">*</span> presentacion_deseada <span class="op">/</span> opciones_posibles[<span class="st">'presentacion'</span>]</span>
+<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a>        opciones_posibles[<span class="st">'cantidad'</span>] <span class="op">=</span> presentacion_deseada <span class="op">/</span> opciones_posibles[<span class="st">'presentacion'</span>]</span>
+<span id="cb29-26"><a href="#cb29-26" aria-hidden="true" tabindex="-1"></a>        opcion_mas_barata <span class="op">=</span> opciones_posibles.loc[opciones_posibles[<span class="st">'costo_total'</span>].idxmin()]</span>
+<span id="cb29-27"><a href="#cb29-27" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb29-28"><a href="#cb29-28" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> opcion_mas_barata, opcion_mas_barata[<span class="st">'costo_total'</span>]</span>
+<span id="cb29-29"><a href="#cb29-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-30"><a href="#cb29-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Creando una lista para almacenar los resultados</span></span>
+<span id="cb29-31"><a href="#cb29-31" aria-hidden="true" tabindex="-1"></a>resultados_optimizacion <span class="op">=</span> []</span>
+<span id="cb29-32"><a href="#cb29-32" aria-hidden="true" tabindex="-1"></a>tipos_columnas <span class="op">=</span> data.dtypes</span>
+<span id="cb29-33"><a href="#cb29-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-34"><a href="#cb29-34" aria-hidden="true" tabindex="-1"></a><span class="co"># Corrigiendo el tipo de datos de la columna 'presentacion' si es necesario</span></span>
+<span id="cb29-35"><a href="#cb29-35" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> tipos_columnas[<span class="st">'presentacion'</span>] <span class="op">!=</span> <span class="st">'float64'</span> <span class="kw">and</span> tipos_columnas[<span class="st">'presentacion'</span>] <span class="op">!=</span> <span class="st">'int64'</span>:</span>
+<span id="cb29-36"><a href="#cb29-36" aria-hidden="true" tabindex="-1"></a>    data[<span class="st">'presentacion'</span>] <span class="op">=</span> pd.to_numeric(data[<span class="st">'presentacion'</span>], errors<span class="op">=</span><span class="st">'coerce'</span>)</span>
+<span id="cb29-37"><a href="#cb29-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-38"><a href="#cb29-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Reintentando el cálculo de la opción más barata</span></span>
+<span id="cb29-39"><a href="#cb29-39" aria-hidden="true" tabindex="-1"></a>resultados_optimizacion <span class="op">=</span> []</span>
+<span id="cb29-40"><a href="#cb29-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-41"><a href="#cb29-41" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> indx,producto <span class="kw">in</span> lista_productos_expandida.iterrows():</span>
+<span id="cb29-42"><a href="#cb29-42" aria-hidden="true" tabindex="-1"></a>    <span class="co"># print(producto)</span></span>
+<span id="cb29-43"><a href="#cb29-43" aria-hidden="true" tabindex="-1"></a>    resultado, costo <span class="op">=</span> encontrar_opcion_mas_barata(producto[<span class="st">'tipo'</span>], producto[<span class="st">'presentacion'</span>], producto[<span class="st">'unidades'</span>])</span>
+<span id="cb29-44"><a href="#cb29-44" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> resultado <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb29-45"><a href="#cb29-45" aria-hidden="true" tabindex="-1"></a>        resultados_optimizacion.append({</span>
+<span id="cb29-46"><a href="#cb29-46" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Producto"</span>: resultado[<span class="st">'nombre'</span>],</span>
+<span id="cb29-47"><a href="#cb29-47" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Tipo"</span>: producto[<span class="st">'tipo'</span>],</span>
+<span id="cb29-48"><a href="#cb29-48" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Grupo"</span>: resultado[<span class="st">'grupo'</span>],</span>
+<span id="cb29-49"><a href="#cb29-49" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Cantidad"</span>: resultado[<span class="st">"cantidad"</span>],</span>
+<span id="cb29-50"><a href="#cb29-50" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Presentacion"</span>: producto[<span class="st">'presentacion'</span>],</span>
+<span id="cb29-51"><a href="#cb29-51" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Unidades"</span>: producto[<span class="st">'unidades'</span>],</span>
+<span id="cb29-52"><a href="#cb29-52" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Marca"</span>: resultado[<span class="st">'marca'</span>],</span>
+<span id="cb29-53"><a href="#cb29-53" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Precio"</span>: resultado[<span class="st">"precio"</span>],</span>
+<span id="cb29-54"><a href="#cb29-54" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Lugar"</span>: resultado[<span class="st">'lugar'</span>],</span>
+<span id="cb29-55"><a href="#cb29-55" aria-hidden="true" tabindex="-1"></a>            <span class="st">'Costo_total'</span>: costo,</span>
+<span id="cb29-56"><a href="#cb29-56" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Categoria_Precio"</span>: resultado[<span class="st">'categoria_precio'</span>],</span>
+<span id="cb29-57"><a href="#cb29-57" aria-hidden="true" tabindex="-1"></a>            <span class="st">'Modelo'</span>:<span class="st">'Heuristica'</span></span>
+<span id="cb29-58"><a href="#cb29-58" aria-hidden="true" tabindex="-1"></a>        })</span>
+<span id="cb29-59"><a href="#cb29-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-60"><a href="#cb29-60" aria-hidden="true" tabindex="-1"></a><span class="co"># Convirtiendo los resultados en un DataFrame para una mejor visualización</span></span>
+<span id="cb29-61"><a href="#cb29-61" aria-hidden="true" tabindex="-1"></a>resultados_df <span class="op">=</span> pd.DataFrame(resultados_optimizacion)</span>
+<span id="cb29-62"><a href="#cb29-62" aria-hidden="true" tabindex="-1"></a>display(resultados_df.sort_values(<span class="st">'Lugar'</span>))</span>
+<span id="cb29-63"><a href="#cb29-63" aria-hidden="true" tabindex="-1"></a>costo_lista <span class="op">=</span> resultados_df[<span class="st">'Precio'</span>].<span class="bu">sum</span>() <span class="op">+</span> <span class="dv">20000</span><span class="op">*</span>resultados_df.Lugar.unique().<span class="fu">__len__</span>()</span>
+<span id="cb29-64"><a href="#cb29-64" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'el costo de la lista total sería: $</span><span class="sc">{</span>costo_lista<span class="sc">:,</span><span class="fl">.2</span><span class="er">f</span><span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb29-65"><a href="#cb29-65" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/tmp/ipykernel_73881/290911628.py:14: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  producto_mas_barato['cantidad'] = 1
+/tmp/ipykernel_73881/290911628.py:14: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  producto_mas_barato['cantidad'] = 1
+/tmp/ipykernel_73881/290911628.py:14: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  producto_mas_barato['cantidad'] = 1
+/tmp/ipykernel_73881/290911628.py:14: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  producto_mas_barato['cantidad'] = 1
+/tmp/ipykernel_73881/290911628.py:14: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  producto_mas_barato['cantidad'] = 1
+/tmp/ipykernel_73881/290911628.py:14: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  producto_mas_barato['cantidad'] = 1
+/tmp/ipykernel_73881/290911628.py:14: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  producto_mas_barato['cantidad'] = 1
+/tmp/ipykernel_73881/290911628.py:14: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  producto_mas_barato['cantidad'] = 1
+/tmp/ipykernel_73881/290911628.py:14: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  producto_mas_barato['cantidad'] = 1
+/tmp/ipykernel_73881/290911628.py:14: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  producto_mas_barato['cantidad'] = 1
+/tmp/ipykernel_73881/290911628.py:14: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  producto_mas_barato['cantidad'] = 1
+/tmp/ipykernel_73881/290911628.py:14: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  producto_mas_barato['cantidad'] = 1
+/tmp/ipykernel_73881/290911628.py:14: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  producto_mas_barato['cantidad'] = 1
+/tmp/ipykernel_73881/290911628.py:14: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  producto_mas_barato['cantidad'] = 1
+/tmp/ipykernel_73881/290911628.py:14: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  producto_mas_barato['cantidad'] = 1
+/tmp/ipykernel_73881/290911628.py:14: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  producto_mas_barato['cantidad'] = 1
+/tmp/ipykernel_73881/290911628.py:14: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  producto_mas_barato['cantidad'] = 1
+/tmp/ipykernel_73881/290911628.py:14: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  producto_mas_barato['cantidad'] = 1
+/tmp/ipykernel_73881/290911628.py:14: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  producto_mas_barato['cantidad'] = 1
+/tmp/ipykernel_73881/290911628.py:14: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  producto_mas_barato['cantidad'] = 1
+/tmp/ipykernel_73881/290911628.py:14: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  producto_mas_barato['cantidad'] = 1
+/tmp/ipykernel_73881/290911628.py:14: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  producto_mas_barato['cantidad'] = 1
+/tmp/ipykernel_73881/290911628.py:14: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  producto_mas_barato['cantidad'] = 1
+/tmp/ipykernel_73881/290911628.py:14: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  producto_mas_barato['cantidad'] = 1
+/tmp/ipykernel_73881/290911628.py:14: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  producto_mas_barato['cantidad'] = 1
+/tmp/ipykernel_73881/290911628.py:14: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  producto_mas_barato['cantidad'] = 1
+/tmp/ipykernel_73881/290911628.py:14: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  producto_mas_barato['cantidad'] = 1
+/tmp/ipykernel_73881/290911628.py:14: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  producto_mas_barato['cantidad'] = 1
+/tmp/ipykernel_73881/290911628.py:14: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  producto_mas_barato['cantidad'] = 1
+/tmp/ipykernel_73881/290911628.py:14: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  producto_mas_barato['cantidad'] = 1
+/tmp/ipykernel_73881/290911628.py:14: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  producto_mas_barato['cantidad'] = 1
+/tmp/ipykernel_73881/290911628.py:14: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  producto_mas_barato['cantidad'] = 1
+/tmp/ipykernel_73881/290911628.py:14: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  producto_mas_barato['cantidad'] = 1
+/tmp/ipykernel_73881/290911628.py:14: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  producto_mas_barato['cantidad'] = 1
+/tmp/ipykernel_73881/290911628.py:14: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  producto_mas_barato['cantidad'] = 1</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Producto</th>
+<th data-quarto-table-cell-role="th">Tipo</th>
+<th data-quarto-table-cell-role="th">Grupo</th>
+<th data-quarto-table-cell-role="th">Cantidad</th>
+<th data-quarto-table-cell-role="th">Presentacion</th>
+<th data-quarto-table-cell-role="th">Unidades</th>
+<th data-quarto-table-cell-role="th">Marca</th>
+<th data-quarto-table-cell-role="th">Precio</th>
+<th data-quarto-table-cell-role="th">Lugar</th>
+<th data-quarto-table-cell-role="th">Costo_total</th>
+<th data-quarto-table-cell-role="th">Categoria_Precio</th>
+<th data-quarto-table-cell-role="th">Modelo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">16</td>
+<td>Vino Tinto de Cocina</td>
+<td>Vino</td>
+<td>Bebidas Alcohólicas</td>
+<td>1</td>
+<td>750.0</td>
+<td>ml</td>
+<td>Sanson</td>
+<td>13200</td>
+<td>Ara</td>
+<td>13200</td>
+<td>Bajo</td>
+<td>Heuristica</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">30</td>
+<td>Gomas Comunes Dulces</td>
+<td>Gomas</td>
+<td>Snacks y Golosinas</td>
+<td>1</td>
+<td>90.0</td>
+<td>g</td>
+<td>Trululu</td>
+<td>1200</td>
+<td>Ara</td>
+<td>1200</td>
+<td>Bajo</td>
+<td>Heuristica</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">18</td>
+<td>Alimento para Perros Adultos</td>
+<td>Alimento para Perros</td>
+<td>Mascotas</td>
+<td>1</td>
+<td>4000.0</td>
+<td>g</td>
+<td>Rocku</td>
+<td>11500</td>
+<td>Ara</td>
+<td>11500</td>
+<td>Medio-Alto</td>
+<td>Heuristica</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">9</td>
+<td>Miel de Abejas</td>
+<td>Miel</td>
+<td>Alimentos Secos y Enlatados</td>
+<td>1</td>
+<td>345.0</td>
+<td>g</td>
+<td>Natumiel</td>
+<td>6850</td>
+<td>Ara</td>
+<td>6850</td>
+<td>Medio-Alto</td>
+<td>Heuristica</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">33</td>
+<td>Bocadillos</td>
+<td>Bocadillos</td>
+<td>Snacks y Golosinas</td>
+<td>1</td>
+<td>250.0</td>
+<td>g</td>
+<td>Bocaricos</td>
+<td>2550</td>
+<td>Ara</td>
+<td>2550</td>
+<td>Bajo</td>
+<td>Heuristica</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>Huevos AA Rojos</td>
+<td>Huevos</td>
+<td>Alimentos Frescos</td>
+<td>1</td>
+<td>12.0</td>
+<td>unidades</td>
+<td>Canasto</td>
+<td>3300</td>
+<td>Ara</td>
+<td>3300</td>
+<td>Bajo</td>
+<td>Heuristica</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">5</td>
+<td>Tostadas Blancas</td>
+<td>Tostadas</td>
+<td>Alimentos Secos y Enlatados</td>
+<td>1</td>
+<td>150.0</td>
+<td>g</td>
+<td>Horneaditos</td>
+<td>1150</td>
+<td>D1</td>
+<td>1150</td>
+<td>Bajo</td>
+<td>Heuristica</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">26</td>
+<td>Pan Artesanal Tajado</td>
+<td>Pan</td>
+<td>Productos de Panadería y Cereal</td>
+<td>1</td>
+<td>500.0</td>
+<td>g</td>
+<td>Horneaditos</td>
+<td>3490</td>
+<td>D1</td>
+<td>3490</td>
+<td>Bajo</td>
+<td>Heuristica</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">24</td>
+<td>Esponja Doble Uso</td>
+<td>Esponja</td>
+<td>Productos de Limpieza y Hogar</td>
+<td>1</td>
+<td>3.0</td>
+<td>unidades</td>
+<td>Tidy House</td>
+<td>1650</td>
+<td>D1</td>
+<td>1650</td>
+<td>Bajo</td>
+<td>Heuristica</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">32</td>
+<td>Pasabocas de Maíz con Sabor Natural</td>
+<td>Pasabocas</td>
+<td>Snacks y Golosinas</td>
+<td>1</td>
+<td>300.0</td>
+<td>g</td>
+<td>Crujiarepas</td>
+<td>4950</td>
+<td>D1</td>
+<td>4950</td>
+<td>Medio</td>
+<td>Heuristica</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">20</td>
+<td>Cera Autobrillante con Aroma Floral</td>
+<td>Cera</td>
+<td>Productos de Limpieza y Hogar</td>
+<td>1</td>
+<td>1000.0</td>
+<td>ml</td>
+<td>Brilla King</td>
+<td>6450</td>
+<td>D1</td>
+<td>6450</td>
+<td>Medio</td>
+<td>Heuristica</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">6</td>
+<td>Salsa de Soya</td>
+<td>Salsa</td>
+<td>Alimentos Secos y Enlatados</td>
+<td>1</td>
+<td>350.0</td>
+<td>g</td>
+<td>Sakurahana</td>
+<td>7390</td>
+<td>Jumbo</td>
+<td>7390</td>
+<td>Medio-Alto</td>
+<td>Heuristica</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">31</td>
+<td>Palomitas de Maíz</td>
+<td>Palomitas</td>
+<td>Snacks y Golosinas</td>
+<td>1</td>
+<td>160.0</td>
+<td>g</td>
+<td>Cheetos</td>
+<td>1603</td>
+<td>Jumbo</td>
+<td>1603</td>
+<td>Bajo</td>
+<td>Heuristica</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">29</td>
+<td>Galletas Sánduche de Chocolate Rellenas con Cr...</td>
+<td>Galletas</td>
+<td>Snacks y Golosinas</td>
+<td>1</td>
+<td>432.0</td>
+<td>g</td>
+<td>Milo</td>
+<td>3354</td>
+<td>Jumbo</td>
+<td>3354</td>
+<td>Bajo</td>
+<td>Heuristica</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">28</td>
+<td>Pistachos</td>
+<td>Pistachos</td>
+<td>Snacks y Golosinas</td>
+<td>1</td>
+<td>35.0</td>
+<td>g</td>
+<td>Manitoba</td>
+<td>3790</td>
+<td>Jumbo</td>
+<td>3790</td>
+<td>Medio</td>
+<td>Heuristica</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">11</td>
+<td>Macarrones con Queso Preparados</td>
+<td>Macarrones</td>
+<td>Alimentos Secos y Enlatados</td>
+<td>1</td>
+<td>53.0</td>
+<td>g</td>
+<td>Doria</td>
+<td>2150</td>
+<td>Jumbo</td>
+<td>2150</td>
+<td>Bajo</td>
+<td>Heuristica</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">27</td>
+<td>Nachos</td>
+<td>Nachos</td>
+<td>Snacks y Golosinas</td>
+<td>1</td>
+<td>180.0</td>
+<td>g</td>
+<td>Azteca</td>
+<td>4390</td>
+<td>Jumbo</td>
+<td>4390</td>
+<td>Medio</td>
+<td>Heuristica</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">25</td>
+<td>Cereal de Avena</td>
+<td>Cereal</td>
+<td>Productos de Panadería y Cereal</td>
+<td>1</td>
+<td>240.0</td>
+<td>g</td>
+<td>Choco Krispis</td>
+<td>10460</td>
+<td>Éxito</td>
+<td>10460</td>
+<td>Alto</td>
+<td>Heuristica</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">23</td>
+<td>Paños Húmedos para Bebé</td>
+<td>Paños</td>
+<td>Productos de Limpieza y Hogar</td>
+<td>1</td>
+<td>120.0</td>
+<td>unidades</td>
+<td>Pequeñín</td>
+<td>10720</td>
+<td>Éxito</td>
+<td>10720</td>
+<td>Medio-Alto</td>
+<td>Heuristica</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">22</td>
+<td>Repuesto de Ambientador Automático con Aroma a...</td>
+<td>Repuesto</td>
+<td>Productos de Limpieza y Hogar</td>
+<td>1</td>
+<td>250.0</td>
+<td>ml</td>
+<td>Bonaire</td>
+<td>15890</td>
+<td>Éxito</td>
+<td>15890</td>
+<td>Alto</td>
+<td>Heuristica</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">21</td>
+<td>Detergente Líquido con Aroma Floral</td>
+<td>Detergente</td>
+<td>Productos de Limpieza y Hogar</td>
+<td>1</td>
+<td>3900.0</td>
+<td>ml</td>
+<td>Lavomatic</td>
+<td>28350</td>
+<td>Éxito</td>
+<td>28350</td>
+<td>Alto</td>
+<td>Heuristica</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">19</td>
+<td>Vela con Aroma a Vainilla</td>
+<td>Vela</td>
+<td>Productos de Limpieza y Hogar</td>
+<td>1</td>
+<td>113.0</td>
+<td>g</td>
+<td>Glade</td>
+<td>16800</td>
+<td>Éxito</td>
+<td>16800</td>
+<td>Alto</td>
+<td>Heuristica</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>Morrillo de Res</td>
+<td>Morrillo</td>
+<td>Alimentos Frescos</td>
+<td>1</td>
+<td>1000.0</td>
+<td>g</td>
+<td>Éxito</td>
+<td>14730</td>
+<td>Éxito</td>
+<td>14730</td>
+<td>Alto</td>
+<td>Heuristica</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">17</td>
+<td>Licor de Café</td>
+<td>Licor</td>
+<td>Bebidas Alcohólicas</td>
+<td>1</td>
+<td>750.0</td>
+<td>ml</td>
+<td>Convier</td>
+<td>53800</td>
+<td>Éxito</td>
+<td>53800</td>
+<td>Medio-Alto</td>
+<td>Heuristica</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">15</td>
+<td>Aromática</td>
+<td>Aromática</td>
+<td>Bebidas</td>
+<td>1</td>
+<td>20.0</td>
+<td>g</td>
+<td>Hindú</td>
+<td>6600</td>
+<td>Éxito</td>
+<td>6600</td>
+<td>Medio-Alto</td>
+<td>Heuristica</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">14</td>
+<td>Té Rojo Frío</td>
+<td>Té</td>
+<td>Bebidas</td>
+<td>1</td>
+<td>350.0</td>
+<td>ml</td>
+<td>Tea World</td>
+<td>3020</td>
+<td>Éxito</td>
+<td>3020</td>
+<td>Medio</td>
+<td>Heuristica</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">13</td>
+<td>Refresco Instantáneo Dietético con Sabor a Limón</td>
+<td>Refresco</td>
+<td>Bebidas</td>
+<td>1</td>
+<td>1000.0</td>
+<td>ml</td>
+<td>LightYá</td>
+<td>1120</td>
+<td>Éxito</td>
+<td>1120</td>
+<td>Bajo</td>
+<td>Heuristica</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">12</td>
+<td>Jugo de Arándano</td>
+<td>Jugo</td>
+<td>Bebidas</td>
+<td>1</td>
+<td>1890.0</td>
+<td>ml</td>
+<td>Ocean Spray</td>
+<td>13850</td>
+<td>Éxito</td>
+<td>13850</td>
+<td>Alto</td>
+<td>Heuristica</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">10</td>
+<td>Macadamias Dulces</td>
+<td>Macadamias</td>
+<td>Alimentos Secos y Enlatados</td>
+<td>1</td>
+<td>250.0</td>
+<td>g</td>
+<td>Alba</td>
+<td>38600</td>
+<td>Éxito</td>
+<td>38600</td>
+<td>Alto</td>
+<td>Heuristica</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>Leche Condensada</td>
+<td>Leche</td>
+<td>Alimentos Frescos</td>
+<td>1</td>
+<td>180.0</td>
+<td>g</td>
+<td>Parmalat</td>
+<td>3410</td>
+<td>Éxito</td>
+<td>3410</td>
+<td>Bajo</td>
+<td>Heuristica</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">8</td>
+<td>Soya Instantánea con Sabor Natural</td>
+<td>Soya</td>
+<td>Alimentos Secos y Enlatados</td>
+<td>1</td>
+<td>400.0</td>
+<td>g</td>
+<td>Forza Soya</td>
+<td>18850</td>
+<td>Éxito</td>
+<td>18850</td>
+<td>Alto</td>
+<td>Heuristica</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">7</td>
+<td>Fríjoles Refritos</td>
+<td>Fríjoles</td>
+<td>Alimentos Secos y Enlatados</td>
+<td>1</td>
+<td>458.0</td>
+<td>g</td>
+<td>Old El Paso</td>
+<td>10750</td>
+<td>Éxito</td>
+<td>10750</td>
+<td>Alto</td>
+<td>Heuristica</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>Contramuslos de Pollo</td>
+<td>Contramuslos</td>
+<td>Alimentos Frescos</td>
+<td>1</td>
+<td>1500.0</td>
+<td>g</td>
+<td>Pollocoa</td>
+<td>19050</td>
+<td>Éxito</td>
+<td>19050</td>
+<td>Alto</td>
+<td>Heuristica</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">0</td>
+<td>Pulpa de Mango</td>
+<td>Pulpa</td>
+<td>Alimentos Frescos</td>
+<td>1</td>
+<td>230.0</td>
+<td>g</td>
+<td>Éxito</td>
+<td>2760</td>
+<td>Éxito</td>
+<td>2760</td>
+<td>Bajo</td>
+<td>Heuristica</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>el costo de la lista total sería: $427,727.00</code></pre>
+</div>
+</div>
+<p>El algoritmo se ha sido adaptado para entregarnos una solución optima factible, buscando minimizar el costo de cada producto individualmente, en lugar de considerar el costo total del conjunto de productos. Esto puede estar conducioento a una optimización local (por producto) pero no necesariamente a una optimización Global,</p>
+<p>Basado en tu código, el modelo de programación lineal puede ser planteado matemáticamente de la siguiente manera:</p>
+</section>
+<section id="variables" class="level3">
+<h3 class="anchored" data-anchor-id="variables">Variables:</h3>
+<ul>
+<li><span class="math inline">\(x_{ij}\)</span>: Cantidad del producto <span class="math inline">\(j\)</span> a comprar en el almacén <span class="math inline">\(i\)</span>. Estas son las variables de decisión principales.</li>
+<li>Variables auxiliares para el costo total y otras sumas.</li>
+</ul>
+</section>
+<section id="función-objetiva" class="level3">
+<h3 class="anchored" data-anchor-id="función-objetiva">Función Objetiva:</h3>
+<p>Minimizar: <span class="math display">\[\text{Costo Total} = \sum_{i, j} \text{Costo}_{ij} \times x_{ij} + \text{Costo Desplazamiento} \times \text{Número de Almacenes}\]</span></p>
+<p>Donde: - <span class="math inline">\(\text{Costo}_{ij}\)</span> es el costo del producto <span class="math inline">\(j\)</span> en el almacén <span class="math inline">\(i\)</span>. - <span class="math inline">\(\text{Costo Desplazamiento}\)</span> es el costo fijo de desplazarse a un almacén. - <span class="math inline">\(\text{Número de Almacenes}\)</span> es la cantidad total de almacenes diferentes.</p>
+</section>
+<section id="restricciones" class="level3">
+<h3 class="anchored" data-anchor-id="restricciones">Restricciones:</h3>
+<ol type="1">
+<li><strong>Restricción de Presupuesto:</strong> <span class="math display">\[\text{Costo Total} \leq \text{Presupuesto Máximo}\]</span>
+<ul>
+<li>Aquí, <span class="math inline">\(\text{Presupuesto Máximo}\)</span> es el límite de costo que no se puede superar (en tu caso, parece ser una variable llamada <code>costo_lista</code>).</li>
+</ul></li>
+<li><strong>Restricción de Cantidad Mínima de Productos:</strong> <span class="math display">\[\sum_{i, j} x_{ij} \geq \text{Porcentaje Mínimo de la Lista} \times \text{Número Total de Productos en Lista}\]</span>
+<ul>
+<li>Esto asegura que se compre al menos un cierto porcentaje del total de productos en la lista (en tu caso, parece ser el 50% del total de productos en <code>df_list</code>).</li>
+</ul></li>
+<li><strong>Restricciones de Presentación Deseada:</strong> Para cada tipo de producto en la lista de deseos: <span class="math display">\[\sum_{i, j} (\text{Presentación del Producto}_{ij} \times x_{ij}) \geq \text{Presentación Deseada}_j\]</span>
+<ul>
+<li>Esto asegura que se cumpla o exceda la cantidad deseada de cada tipo de producto.</li>
+</ul></li>
+<li><strong>Restricciones de No Negatividad:</strong> <span class="math display">\[x_{ij} \geq 0\]</span>
+<ul>
+<li>Las cantidades de los productos no pueden ser negativas.</li>
+</ul></li>
+</ol>
+<div class="cell" data-execution_count="782">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pulp <span class="im">import</span> LpProblem, LpMaximize, LpVariable, lpSum, LpBinary, LpStatus</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar los archivos nuevamente debido al reinicio del entorno de ejecución</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>df_lista <span class="op">=</span> df_list.copy()</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>df_precios_filtrados <span class="op">=</span> df_filtered.copy()</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear un diccionario que mapee cada producto deseado con los productos disponibles en los almacenes</span></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>productos_disponibles <span class="op">=</span> df_precios_filtrados.groupby(<span class="st">'tipo'</span>).<span class="bu">apply</span>(<span class="kw">lambda</span> x: x.to_dict(orient<span class="op">=</span><span class="st">'records'</span>)).to_dict()</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear las variables de decisión y asociar cada una con su producto correspondiente</span></span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>variables_decision <span class="op">=</span> {}</span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> tipo_producto <span class="kw">in</span> df_lista[<span class="st">'tipo'</span>]:</span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> producto <span class="kw">in</span> productos_disponibles.get(tipo_producto, []):</span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>        nombre_producto <span class="op">=</span> producto[<span class="st">'nombre'</span>]</span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>        lugar <span class="op">=</span> producto[<span class="st">'lugar'</span>]</span>
+<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a>        var_name <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>nombre_producto<span class="sc">}</span><span class="ss">_</span><span class="sc">{</span>lugar<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Almacenar la variable y la información del producto en una tupla</span></span>
+<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a>        variables_decision[var_name] <span class="op">=</span> (LpVariable(var_name, lowBound<span class="op">=</span><span class="dv">0</span>, cat<span class="op">=</span><span class="st">'Integer'</span>), producto)</span>
+<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-21"><a href="#cb32-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear el modelo de programación lineal</span></span>
+<span id="cb32-22"><a href="#cb32-22" aria-hidden="true" tabindex="-1"></a>modelo <span class="op">=</span> LpProblem(<span class="st">"Optimizacion_Compra_Productos"</span>, LpMinimize)</span>
+<span id="cb32-23"><a href="#cb32-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-24"><a href="#cb32-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Costo de desplazamiento entre almacenes</span></span>
+<span id="cb32-25"><a href="#cb32-25" aria-hidden="true" tabindex="-1"></a>costo_desplazamiento <span class="op">=</span> <span class="dv">20000</span></span>
+<span id="cb32-26"><a href="#cb32-26" aria-hidden="true" tabindex="-1"></a>almacenes <span class="op">=</span> df_precios_filtrados[<span class="st">'lugar'</span>].unique()</span>
+<span id="cb32-27"><a href="#cb32-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-28"><a href="#cb32-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Calcular el costo de los productos y el costo total</span></span>
+<span id="cb32-29"><a href="#cb32-29" aria-hidden="true" tabindex="-1"></a>costo_productos <span class="op">=</span> lpSum([producto_info[<span class="st">'precio'</span>] <span class="op">*</span> var <span class="cf">for</span> var, producto_info <span class="kw">in</span> variables_decision.values()])</span>
+<span id="cb32-30"><a href="#cb32-30" aria-hidden="true" tabindex="-1"></a>costo_total <span class="op">=</span> costo_productos <span class="op">+</span> costo_desplazamiento <span class="op">*</span> <span class="bu">len</span>(almacenes)</span>
+<span id="cb32-31"><a href="#cb32-31" aria-hidden="true" tabindex="-1"></a><span class="co"># for var,producto_info in variables_decision.values():</span></span>
+<span id="cb32-32"><a href="#cb32-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Función objetivo</span></span>
+<span id="cb32-33"><a href="#cb32-33" aria-hidden="true" tabindex="-1"></a>modelo <span class="op">+=</span> costo_total</span>
+<span id="cb32-34"><a href="#cb32-34" aria-hidden="true" tabindex="-1"></a>modelo <span class="op">+=</span> lpSum([var  <span class="cf">for</span> var, producto_info <span class="kw">in</span> variables_decision.values()])<span class="op">&gt;=</span> <span class="bu">int</span>(<span class="bu">len</span>(df_list)<span class="op">*</span><span class="fl">.5</span>)</span>
+<span id="cb32-35"><a href="#cb32-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-36"><a href="#cb32-36" aria-hidden="true" tabindex="-1"></a><span class="co"># Restricciones</span></span>
+<span id="cb32-37"><a href="#cb32-37" aria-hidden="true" tabindex="-1"></a>modelo <span class="op">+=</span> costo_total <span class="op">&lt;=</span> costo_lista, <span class="st">"Restriccion_Presupuesto"</span></span>
+<span id="cb32-38"><a href="#cb32-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-39"><a href="#cb32-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Satisfacer la lista de deseos</span></span>
+<span id="cb32-40"><a href="#cb32-40" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> index, row <span class="kw">in</span> df_lista.iterrows():</span>
+<span id="cb32-41"><a href="#cb32-41" aria-hidden="true" tabindex="-1"></a>    tipo_producto <span class="op">=</span> row[<span class="st">'tipo'</span>]</span>
+<span id="cb32-42"><a href="#cb32-42" aria-hidden="true" tabindex="-1"></a>    presentacion_deseada <span class="op">=</span> row[<span class="st">'presentacion'</span>]</span>
+<span id="cb32-43"><a href="#cb32-43" aria-hidden="true" tabindex="-1"></a>    productos_relevantes <span class="op">=</span> [(var, producto) <span class="cf">for</span> var, producto <span class="kw">in</span> variables_decision.values() <span class="cf">if</span> producto[<span class="st">'tipo'</span>] <span class="op">==</span> tipo_producto]</span>
+<span id="cb32-44"><a href="#cb32-44" aria-hidden="true" tabindex="-1"></a>    modelo <span class="op">+=</span> lpSum([producto[<span class="st">'presentacion'</span>] <span class="op">*</span> var <span class="cf">for</span> var, producto <span class="kw">in</span> productos_relevantes]) <span class="op">&gt;=</span> presentacion_deseada, <span class="ss">f"Restriccion_</span><span class="sc">{</span>tipo_producto<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb32-45"><a href="#cb32-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-46"><a href="#cb32-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-47"><a href="#cb32-47" aria-hidden="true" tabindex="-1"></a><span class="co"># Mostrar el modelo corregido</span></span>
+<span id="cb32-48"><a href="#cb32-48" aria-hidden="true" tabindex="-1"></a>modelo.solve()</span>
+<span id="cb32-49"><a href="#cb32-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-50"><a href="#cb32-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-51"><a href="#cb32-51" aria-hidden="true" tabindex="-1"></a><span class="co"># Verificar el estado de la solución</span></span>
+<span id="cb32-52"><a href="#cb32-52" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> LpStatus[modelo.status] <span class="op">==</span> <span class="st">'Optimal'</span>:</span>
+<span id="cb32-53"><a href="#cb32-53" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Solución óptima encontrada!"</span>)</span>
+<span id="cb32-54"><a href="#cb32-54" aria-hidden="true" tabindex="-1"></a>    resultados <span class="op">=</span> []</span>
+<span id="cb32-55"><a href="#cb32-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-56"><a href="#cb32-56" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Recorrer las variables de decisión y extraer sus valores</span></span>
+<span id="cb32-57"><a href="#cb32-57" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> var_name, (variable, producto_info) <span class="kw">in</span> variables_decision.items():</span>
+<span id="cb32-58"><a href="#cb32-58" aria-hidden="true" tabindex="-1"></a>        cantidad <span class="op">=</span> variable.varValue  <span class="co"># Valor de la variable de decisión</span></span>
+<span id="cb32-59"><a href="#cb32-59" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> cantidad <span class="op">&gt;</span> <span class="dv">0</span>:  <span class="co"># Considerar solo los productos que necesitan ser comprados</span></span>
+<span id="cb32-60"><a href="#cb32-60" aria-hidden="true" tabindex="-1"></a>            resultados.append({</span>
+<span id="cb32-61"><a href="#cb32-61" aria-hidden="true" tabindex="-1"></a>                <span class="st">'Producto'</span>: producto_info[<span class="st">'nombre'</span>],</span>
+<span id="cb32-62"><a href="#cb32-62" aria-hidden="true" tabindex="-1"></a>                <span class="st">'Marca'</span>: producto_info[<span class="st">'marca'</span>],</span>
+<span id="cb32-63"><a href="#cb32-63" aria-hidden="true" tabindex="-1"></a>                <span class="st">'Cantidad'</span>: cantidad,</span>
+<span id="cb32-64"><a href="#cb32-64" aria-hidden="true" tabindex="-1"></a>                <span class="st">'Presentacion'</span>:producto_info[<span class="st">"presentacion"</span>],</span>
+<span id="cb32-65"><a href="#cb32-65" aria-hidden="true" tabindex="-1"></a>                <span class="st">'Unidades'</span>:producto_info[<span class="st">"unidades"</span>],</span>
+<span id="cb32-66"><a href="#cb32-66" aria-hidden="true" tabindex="-1"></a>                <span class="st">'Lugar'</span>: producto_info[<span class="st">'lugar'</span>],</span>
+<span id="cb32-67"><a href="#cb32-67" aria-hidden="true" tabindex="-1"></a>                <span class="st">'Tipo'</span>: producto_info[<span class="st">'tipo'</span>],</span>
+<span id="cb32-68"><a href="#cb32-68" aria-hidden="true" tabindex="-1"></a>                <span class="st">'Grupo'</span>: producto_info[<span class="st">'grupo'</span>],</span>
+<span id="cb32-69"><a href="#cb32-69" aria-hidden="true" tabindex="-1"></a>                <span class="st">'Precio'</span>: producto_info[<span class="st">"precio"</span>],</span>
+<span id="cb32-70"><a href="#cb32-70" aria-hidden="true" tabindex="-1"></a>                <span class="st">'Costo_total'</span>:cantidad<span class="op">*</span>producto_info[<span class="st">"precio"</span>],</span>
+<span id="cb32-71"><a href="#cb32-71" aria-hidden="true" tabindex="-1"></a>                <span class="st">'Categoria_Precio'</span>:producto_info[<span class="st">"categoria_precio"</span>],</span>
+<span id="cb32-72"><a href="#cb32-72" aria-hidden="true" tabindex="-1"></a>                <span class="st">'Modelo'</span>:<span class="st">'Programación Lineal'</span></span>
+<span id="cb32-73"><a href="#cb32-73" aria-hidden="true" tabindex="-1"></a>            })</span>
+<span id="cb32-74"><a href="#cb32-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-75"><a href="#cb32-75" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Convertir los resultados en un DataFrame para una mejor visualización</span></span>
+<span id="cb32-76"><a href="#cb32-76" aria-hidden="true" tabindex="-1"></a>    resultados_PL_df <span class="op">=</span> pd.DataFrame(resultados)</span>
+<span id="cb32-77"><a href="#cb32-77" aria-hidden="true" tabindex="-1"></a>    display(resultados_PL_df.sort_values(<span class="st">'Lugar'</span>))</span>
+<span id="cb32-78"><a href="#cb32-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-79"><a href="#cb32-79" aria-hidden="true" tabindex="-1"></a>    display(<span class="ss">f'El costo total es $</span><span class="sc">{</span>costo_total<span class="sc">.</span>value()<span class="sc">:,</span><span class="fl">.2</span><span class="er">f</span><span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb32-80"><a href="#cb32-80" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb32-81"><a href="#cb32-81" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"No se encontró una solución óptima."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Welcome to the CBC MILP Solver 
+Version: 2.10.3 
+Build Date: Dec 15 2019 
+
+command line - /home/dancastarod/.local/lib/python3.8/site-packages/pulp/solverdir/cbc/linux/64/cbc /tmp/f552ba9cb1f14c1e934e07996a29e078-pulp.mps timeMode elapsed branch printingOptions all solution /tmp/f552ba9cb1f14c1e934e07996a29e078-pulp.sol (default strategy 1)
+At line 2 NAME          MODEL
+At line 3 ROWS
+At line 41 COLUMNS
+At line 6258 RHS
+At line 6295 BOUNDS
+At line 7332 ENDATA
+Problem MODEL has 36 rows, 1036 columns and 3108 elements
+Coin0008I MODEL read with 0 errors
+Option for timeMode changed from cpu to elapsed
+Continuous objective value is 226894 - 0.00 seconds
+Cgl0004I processed model has 34 rows, 915 columns (915 integer (2 of which binary)) and 2743 elements
+Cbc0012I Integer solution of 292948 found by DiveCoefficient after 0 iterations and 0 nodes (0.01 seconds)
+Cbc0038I Full problem 34 rows 915 columns, reduced to 0 rows 0 columns
+Cbc0012I Integer solution of 254478 found by DiveCoefficient after 41 iterations and 0 nodes (0.03 seconds)
+Cbc0031I 35 added rows had average density of 32.171429
+Cbc0013I At root node, 35 cuts changed objective from 226893.72 to 254478 in 3 passes
+Cbc0014I Cut generator 0 (Probing) - 5 row cuts average 19.0 elements, 1 column cuts (1 active)  in 0.011 seconds - new frequency is 1
+Cbc0014I Cut generator 1 (Gomory) - 30 row cuts average 27.7 elements, 0 column cuts (0 active)  in 0.001 seconds - new frequency is 1
+Cbc0014I Cut generator 2 (Knapsack) - 0 row cuts average 0.0 elements, 0 column cuts (0 active)  in 0.000 seconds - new frequency is -100
+Cbc0014I Cut generator 3 (Clique) - 0 row cuts average 0.0 elements, 0 column cuts (0 active)  in 0.000 seconds - new frequency is -100
+Cbc0014I Cut generator 4 (MixedIntegerRounding2) - 33 row cuts average 29.8 elements, 0 column cuts (0 active)  in 0.001 seconds - new frequency is 1
+Cbc0014I Cut generator 5 (FlowCover) - 0 row cuts average 0.0 elements, 0 column cuts (0 active)  in 0.002 seconds - new frequency is -100
+Cbc0014I Cut generator 6 (TwoMirCuts) - 45 row cuts average 30.5 elements, 0 column cuts (0 active)  in 0.001 seconds - new frequency is 1
+Cbc0001I Search completed - best objective 254478, took 41 iterations and 0 nodes (0.03 seconds)
+Cbc0035I Maximum depth 0, 32 variables fixed on reduced cost
+Cuts at root node changed objective from 226894 to 254478
+Probing was tried 3 times and created 6 cuts of which 0 were active after adding rounds of cuts (0.011 seconds)
+Gomory was tried 3 times and created 30 cuts of which 0 were active after adding rounds of cuts (0.001 seconds)
+Knapsack was tried 3 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+Clique was tried 3 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+MixedIntegerRounding2 was tried 3 times and created 33 cuts of which 0 were active after adding rounds of cuts (0.001 seconds)
+FlowCover was tried 3 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.002 seconds)
+TwoMirCuts was tried 3 times and created 45 cuts of which 0 were active after adding rounds of cuts (0.001 seconds)
+ZeroHalf was tried 1 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+
+Result - Optimal solution found
+
+Objective value:                254478.00000000
+Enumerated nodes:               0
+Total iterations:               41
+Time (CPU seconds):             0.03
+Time (Wallclock seconds):       0.03
+
+Option for printingOptions changed from normal to all
+Total time (CPU seconds):       0.03   (Wallclock seconds):       0.04
+
+Solución óptima encontrada!</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Producto</th>
+<th data-quarto-table-cell-role="th">Marca</th>
+<th data-quarto-table-cell-role="th">Cantidad</th>
+<th data-quarto-table-cell-role="th">Presentacion</th>
+<th data-quarto-table-cell-role="th">Unidades</th>
+<th data-quarto-table-cell-role="th">Lugar</th>
+<th data-quarto-table-cell-role="th">Tipo</th>
+<th data-quarto-table-cell-role="th">Grupo</th>
+<th data-quarto-table-cell-role="th">Precio</th>
+<th data-quarto-table-cell-role="th">Costo_total</th>
+<th data-quarto-table-cell-role="th">Categoria_Precio</th>
+<th data-quarto-table-cell-role="th">Modelo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>Pulpa de Maracuyá</td>
+<td>Solei</td>
+<td>1.0</td>
+<td>250.0</td>
+<td>g</td>
+<td>Ara</td>
+<td>Pulpa</td>
+<td>Alimentos Frescos</td>
+<td>1990</td>
+<td>1990.0</td>
+<td>Bajo</td>
+<td>Programación Lineal</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">32</td>
+<td>Gomas Comunes Dulces</td>
+<td>Trululu</td>
+<td>1.0</td>
+<td>90.0</td>
+<td>g</td>
+<td>Ara</td>
+<td>Gomas</td>
+<td>Snacks y Golosinas</td>
+<td>1200</td>
+<td>1200.0</td>
+<td>Bajo</td>
+<td>Programación Lineal</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">31</td>
+<td>Galletas Integrales con Miel</td>
+<td>Tosh</td>
+<td>2.0</td>
+<td>270.0</td>
+<td>g</td>
+<td>Ara</td>
+<td>Galletas</td>
+<td>Snacks y Golosinas</td>
+<td>399</td>
+<td>798.0</td>
+<td>Bajo</td>
+<td>Programación Lineal</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">28</td>
+<td>Pan Blanco Tajado</td>
+<td>de Ara</td>
+<td>1.0</td>
+<td>550.0</td>
+<td>g</td>
+<td>Ara</td>
+<td>Pan</td>
+<td>Productos de Panadería y Cereal</td>
+<td>2150</td>
+<td>2150.0</td>
+<td>Bajo</td>
+<td>Programación Lineal</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">25</td>
+<td>Paños Húmedos para Bebé con Aloe Vera</td>
+<td>Bubu</td>
+<td>2.0</td>
+<td>63.0</td>
+<td>unidades</td>
+<td>Ara</td>
+<td>Paños</td>
+<td>Productos de Limpieza y Hogar</td>
+<td>3950</td>
+<td>7900.0</td>
+<td>Bajo</td>
+<td>Programación Lineal</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">34</td>
+<td>Pasabocas Surtidos</td>
+<td>Frito Lay</td>
+<td>2.0</td>
+<td>250.0</td>
+<td>g</td>
+<td>Ara</td>
+<td>Pasabocas</td>
+<td>Snacks y Golosinas</td>
+<td>1890</td>
+<td>3780.0</td>
+<td>Bajo</td>
+<td>Programación Lineal</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">16</td>
+<td>Aromática de Yerbabuena</td>
+<td>Aleli</td>
+<td>1.0</td>
+<td>25.0</td>
+<td>g</td>
+<td>Ara</td>
+<td>Aromática</td>
+<td>Bebidas</td>
+<td>1900</td>
+<td>1900.0</td>
+<td>Bajo</td>
+<td>Programación Lineal</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">9</td>
+<td>Miel de Abejas</td>
+<td>Natumiel</td>
+<td>1.0</td>
+<td>345.0</td>
+<td>g</td>
+<td>Ara</td>
+<td>Miel</td>
+<td>Alimentos Secos y Enlatados</td>
+<td>6850</td>
+<td>6850.0</td>
+<td>Medio-Alto</td>
+<td>Programación Lineal</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">17</td>
+<td>Vino Tinto de Cocina</td>
+<td>Sanson</td>
+<td>1.0</td>
+<td>750.0</td>
+<td>ml</td>
+<td>Ara</td>
+<td>Vino</td>
+<td>Bebidas Alcohólicas</td>
+<td>13200</td>
+<td>13200.0</td>
+<td>Bajo</td>
+<td>Programación Lineal</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">35</td>
+<td>Bocadillos</td>
+<td>Bocaricos</td>
+<td>1.0</td>
+<td>250.0</td>
+<td>g</td>
+<td>Ara</td>
+<td>Bocadillos</td>
+<td>Snacks y Golosinas</td>
+<td>2550</td>
+<td>2550.0</td>
+<td>Bajo</td>
+<td>Programación Lineal</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">1</td>
+<td>Huevos AA Rojos</td>
+<td>Canasto</td>
+<td>1.0</td>
+<td>12.0</td>
+<td>unidades</td>
+<td>Ara</td>
+<td>Huevos</td>
+<td>Alimentos Frescos</td>
+<td>3300</td>
+<td>3300.0</td>
+<td>Bajo</td>
+<td>Programación Lineal</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">6</td>
+<td>Salsa de Tomate</td>
+<td>Bassi</td>
+<td>1.0</td>
+<td>400.0</td>
+<td>g</td>
+<td>Ara</td>
+<td>Salsa</td>
+<td>Alimentos Secos y Enlatados</td>
+<td>2000</td>
+<td>2000.0</td>
+<td>Bajo</td>
+<td>Programación Lineal</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">26</td>
+<td>Esponja Doble Uso</td>
+<td>Tidy House</td>
+<td>1.0</td>
+<td>3.0</td>
+<td>unidades</td>
+<td>D1</td>
+<td>Esponja</td>
+<td>Productos de Limpieza y Hogar</td>
+<td>1650</td>
+<td>1650.0</td>
+<td>Bajo</td>
+<td>Programación Lineal</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">4</td>
+<td>Contramuslos de Pollo</td>
+<td>Brasset</td>
+<td>3.0</td>
+<td>700.0</td>
+<td>g</td>
+<td>D1</td>
+<td>Contramuslos</td>
+<td>Alimentos Frescos</td>
+<td>5950</td>
+<td>17850.0</td>
+<td>Medio</td>
+<td>Programación Lineal</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">29</td>
+<td>Nachos</td>
+<td>Crachos</td>
+<td>1.0</td>
+<td>200.0</td>
+<td>g</td>
+<td>D1</td>
+<td>Nachos</td>
+<td>Snacks y Golosinas</td>
+<td>2890</td>
+<td>2890.0</td>
+<td>Bajo</td>
+<td>Programación Lineal</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">23</td>
+<td>Detergente Líquido para Ropa de Color</td>
+<td>Bonaropa</td>
+<td>3.0</td>
+<td>1000.0</td>
+<td>ml</td>
+<td>D1</td>
+<td>Detergente</td>
+<td>Productos de Limpieza y Hogar</td>
+<td>2800</td>
+<td>8400.0</td>
+<td>Bajo</td>
+<td>Programación Lineal</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">21</td>
+<td>Cera Autobrillante con Aroma Floral</td>
+<td>Brilla King</td>
+<td>1.0</td>
+<td>1000.0</td>
+<td>ml</td>
+<td>D1</td>
+<td>Cera</td>
+<td>Productos de Limpieza y Hogar</td>
+<td>6450</td>
+<td>6450.0</td>
+<td>Medio</td>
+<td>Programación Lineal</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">19</td>
+<td>Alimento para Perros Cachorros</td>
+<td>Ringo</td>
+<td>4.0</td>
+<td>1000.0</td>
+<td>g</td>
+<td>D1</td>
+<td>Alimento para Perros</td>
+<td>Mascotas</td>
+<td>2900</td>
+<td>11600.0</td>
+<td>Bajo</td>
+<td>Programación Lineal</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">3</td>
+<td>Leche con Avena</td>
+<td>Latti</td>
+<td>1.0</td>
+<td>200.0</td>
+<td>ml</td>
+<td>D1</td>
+<td>Leche</td>
+<td>Alimentos Frescos</td>
+<td>690</td>
+<td>690.0</td>
+<td>Bajo</td>
+<td>Programación Lineal</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5</td>
+<td>Tostadas Blancas</td>
+<td>Horneaditos</td>
+<td>1.0</td>
+<td>150.0</td>
+<td>g</td>
+<td>D1</td>
+<td>Tostadas</td>
+<td>Alimentos Secos y Enlatados</td>
+<td>1150</td>
+<td>1150.0</td>
+<td>Bajo</td>
+<td>Programación Lineal</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">15</td>
+<td>Té Frío Común con Sabor a Limón</td>
+<td>Eistee</td>
+<td>1.0</td>
+<td>400.0</td>
+<td>ml</td>
+<td>D1</td>
+<td>Té</td>
+<td>Bebidas</td>
+<td>990</td>
+<td>990.0</td>
+<td>Bajo</td>
+<td>Programación Lineal</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">14</td>
+<td>Refresco Instantáneo con Sabor Tropical</td>
+<td>Tutti Frutti</td>
+<td>1.0</td>
+<td>2000.0</td>
+<td>ml</td>
+<td>D1</td>
+<td>Refresco</td>
+<td>Bebidas</td>
+<td>500</td>
+<td>500.0</td>
+<td>Bajo</td>
+<td>Programación Lineal</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">33</td>
+<td>Palomitas de Maíz para Microondas con Sabor a ...</td>
+<td>Kythos</td>
+<td>2.0</td>
+<td>85.0</td>
+<td>g</td>
+<td>D1</td>
+<td>Palomitas</td>
+<td>Snacks y Golosinas</td>
+<td>1490</td>
+<td>2980.0</td>
+<td>Bajo</td>
+<td>Programación Lineal</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">27</td>
+<td>Cereal de Maíz</td>
+<td>Fit Graan</td>
+<td>1.0</td>
+<td>300.0</td>
+<td>g</td>
+<td>D1</td>
+<td>Cereal</td>
+<td>Productos de Panadería y Cereal</td>
+<td>4290</td>
+<td>4290.0</td>
+<td>Medio</td>
+<td>Programación Lineal</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">20</td>
+<td>Vela con Aroma a Canela y Manzana</td>
+<td>Glade</td>
+<td>4.0</td>
+<td>31.0</td>
+<td>g</td>
+<td>Jumbo</td>
+<td>Vela</td>
+<td>Productos de Limpieza y Hogar</td>
+<td>2690</td>
+<td>10760.0</td>
+<td>Bajo</td>
+<td>Programación Lineal</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">30</td>
+<td>Pistachos</td>
+<td>Manitoba</td>
+<td>1.0</td>
+<td>35.0</td>
+<td>g</td>
+<td>Jumbo</td>
+<td>Pistachos</td>
+<td>Snacks y Golosinas</td>
+<td>3790</td>
+<td>3790.0</td>
+<td>Medio</td>
+<td>Programación Lineal</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">13</td>
+<td>Jugo de Naranja</td>
+<td>Hit</td>
+<td>2.0</td>
+<td>1000.0</td>
+<td>ml</td>
+<td>Jumbo</td>
+<td>Jugo</td>
+<td>Bebidas</td>
+<td>4390</td>
+<td>8780.0</td>
+<td>Medio</td>
+<td>Programación Lineal</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">12</td>
+<td>Macarrones en Tubos</td>
+<td>Doria</td>
+<td>1.0</td>
+<td>250.0</td>
+<td>g</td>
+<td>Jumbo</td>
+<td>Macarrones</td>
+<td>Alimentos Secos y Enlatados</td>
+<td>1690</td>
+<td>1690.0</td>
+<td>Bajo</td>
+<td>Programación Lineal</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>Morrillo de Res</td>
+<td>Éxito</td>
+<td>1.0</td>
+<td>1000.0</td>
+<td>g</td>
+<td>Éxito</td>
+<td>Morrillo</td>
+<td>Alimentos Frescos</td>
+<td>14730</td>
+<td>14730.0</td>
+<td>Alto</td>
+<td>Programación Lineal</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">7</td>
+<td>Fríjoles Blancos Cabeza Negra</td>
+<td>Éxito</td>
+<td>1.0</td>
+<td>500.0</td>
+<td>g</td>
+<td>Éxito</td>
+<td>Fríjoles</td>
+<td>Alimentos Secos y Enlatados</td>
+<td>2490</td>
+<td>2490.0</td>
+<td>Bajo</td>
+<td>Programación Lineal</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">8</td>
+<td>Soya</td>
+<td>Éxito</td>
+<td>1.0</td>
+<td>500.0</td>
+<td>g</td>
+<td>Éxito</td>
+<td>Soya</td>
+<td>Alimentos Secos y Enlatados</td>
+<td>1790</td>
+<td>1790.0</td>
+<td>Bajo</td>
+<td>Programación Lineal</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">18</td>
+<td>Licor de Café</td>
+<td>Convier</td>
+<td>1.0</td>
+<td>750.0</td>
+<td>ml</td>
+<td>Éxito</td>
+<td>Licor</td>
+<td>Bebidas Alcohólicas</td>
+<td>53800</td>
+<td>53800.0</td>
+<td>Medio-Alto</td>
+<td>Programación Lineal</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">11</td>
+<td>Macadamias con Chocolate</td>
+<td>Alba</td>
+<td>6.0</td>
+<td>30.0</td>
+<td>g</td>
+<td>Éxito</td>
+<td>Macadamias</td>
+<td>Alimentos Secos y Enlatados</td>
+<td>3780</td>
+<td>22680.0</td>
+<td>Medio</td>
+<td>Programación Lineal</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">10</td>
+<td>Macadamias Saladas</td>
+<td>Manitoba</td>
+<td>2.0</td>
+<td>35.0</td>
+<td>g</td>
+<td>Éxito</td>
+<td>Macadamias</td>
+<td>Alimentos Secos y Enlatados</td>
+<td>4590</td>
+<td>9180.0</td>
+<td>Medio</td>
+<td>Programación Lineal</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">24</td>
+<td>Repuesto de Ambientador Automático con Aroma a...</td>
+<td>Glade</td>
+<td>1.0</td>
+<td>270.0</td>
+<td>ml</td>
+<td>Éxito</td>
+<td>Repuesto</td>
+<td>Productos de Limpieza y Hogar</td>
+<td>15320</td>
+<td>15320.0</td>
+<td>Alto</td>
+<td>Programación Lineal</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">22</td>
+<td>Detergente en Polvo con Aroma a Limón</td>
+<td>Ekono</td>
+<td>1.0</td>
+<td>900.0</td>
+<td>g</td>
+<td>Éxito</td>
+<td>Detergente</td>
+<td>Productos de Limpieza y Hogar</td>
+<td>2410</td>
+<td>2410.0</td>
+<td>Bajo</td>
+<td>Programación Lineal</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>'El costo total es $334,478.00'</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="779">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>df_concatenado <span class="op">=</span> pd.concat([resultados_df, resultados_PL_df])</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Crea el gráfico de barras</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>g <span class="op">=</span> sns.catplot(data<span class="op">=</span>df_concatenado, x<span class="op">=</span><span class="st">'Costo_total'</span>, y<span class="op">=</span><span class="st">'Tipo'</span>, hue<span class="op">=</span><span class="st">'Modelo'</span>, kind<span class="op">=</span><span class="st">'bar'</span>, height<span class="op">=</span><span class="dv">10</span>, aspect<span class="op">=</span><span class="fl">1.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Listas_precios_files/figure-html/cell-24-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="conclusiones" class="level2">
+<h2 class="anchored" data-anchor-id="conclusiones">Conclusiones</h2>
+<p>Al comparar la lista de compras optimizada por el modelo de programación lineal con listas generadas por el modelo heuristico, Podemos concluir lo siguiente. Estas conclusiones destacan las ventajas de utilizar un enfoque de modelado matemático para la toma de decisiones en la gestión de compras y presupuestos:</p>
+<ol type="1">
+<li><strong>Eficiencia en Costos:</strong>
+<ul>
+<li>El modelo optimizado proporciona una mayor eficiencia en costos. Esto significa que por el mismo presupuesto, el modelo permite adquirir una cantidad mayor o igual de productos en comparación con el modelo heurístico optimizando así el uso del presupuesto disponible.</li>
+</ul></li>
+<li><strong>Racionalidad y Consistencia:</strong>
+<ul>
+<li>Las decisiones tomadas a través de la optimización matemática se basan en datos y lógica consistente, en lugar de intuiciones o estimaciones menos precisas. Esto aporta un nivel de racionalidad y previsibilidad que otros métodos pueden carecer.</li>
+</ul></li>
+<li><strong>Reducción del Sesgo Humano:</strong>
+<ul>
+<li>Al depender de un algoritmo matemático, se reduce el sesgo humano en el proceso de toma de decisiones. Esto puede ser particularmente útil en situaciones donde las decisiones impulsivas o emocionales pueden llevar a un uso ineficiente de los recursos.</li>
+</ul></li>
+<li><strong>Capacidad para Manejar Gran Volumen de Datos:</strong>
+<ul>
+<li>El modelo puede analizar y procesar un gran volumen de datos (como precios, ubicaciones y características de los productos) más eficientemente que los métodos manuales o heurísticos, lo que es crucial en entornos con una gran cantidad de opciones y variables.</li>
+</ul></li>
+<li><strong>Personalización y Flexibilidad:</strong>
+<ul>
+<li>El modelo puede adaptarse fácilmente para considerar diferentes escenarios o restricciones, como cambios en el presupuesto, variaciones en los costos de desplazamiento, o la disponibilidad fluctuante de productos, lo que permite una personalización que puede ser difícil de lograr con otros métodos.</li>
+</ul></li>
+<li><strong>Estrategias de Compra Informadas:</strong>
+<ul>
+<li>La lista optimizada puede revelar patrones y estrategias de compra que no son obvios a simple vista. Por ejemplo, puede identificar almacenes específicos donde es más rentable comprar ciertos productos, lo cual puede ser útil para futuras decisiones de compra.</li>
+</ul></li>
+<li><strong>Limitaciones y Supuestos:</strong>
+<ul>
+<li>Es importante reconocer que las conclusiones del modelo se basan en los datos y supuestos actuales. Cambios en estos parámetros pueden alterar la validez de la solución propuesta.</li>
+</ul></li>
+<li><strong>Calidad de los datos:</strong>
+<ul>
+<li>Debido a que el proceso de extracción de los datos se realizó a través de webscraping, esto permite extraer mucha información relevante para el analisis sin embargo es necesario destacar que las técnicas de normalización y categorización no son del todo exactas, por lo que mejores métodos pueden mejorar la precisión del modelo.</li>
+</ul></li>
+<li><strong>Integración de Análisis Predictivo:</strong>
+<ul>
+<li>Incorporar modelos predictivos podría enriquecer el análisis al anticipar tendencias en los precios o la disponibilidad de productos. Esto permitiría ajustar las estrategias de compra en función de proyecciones futuras, no solo en datos históricos.</li>
+</ul></li>
+<li><strong>Actualización Continua de Datos:</strong>
+<ul>
+<li>Dado que los precios y la disponibilidad de los productos pueden cambiar rápidamente, es recomendable establecer un sistema de actualización continua de datos. Esto asegura que el modelo utilice la información más reciente para la toma de decisiones.</li>
+</ul></li>
+<li><strong>Inclusión de Factores Externos:</strong>
+<ul>
+<li>Considerar factores externos como eventos estacionales, promociones especiales o cambios en la economía puede proporcionar una visión más completa y permitir ajustes más precisos en las estrategias de compra.</li>
+</ul></li>
+<li><strong>Análisis de Sensibilidad:</strong>
+<ul>
+<li>Realizar un análisis de sensibilidad para entender cómo diferentes cambios en los supuestos y parámetros afectan los resultados del modelo. Esto puede ayudar a identificar los factores más críticos que influyen en las decisiones de compra.</li>
+</ul></li>
+<li><strong>Evaluación de la Experiencia del Consumidor:</strong>
+<ul>
+<li>Considerar aspectos relacionados con la experiencia del consumidor, como la facilidad de compra y la satisfacción con los productos seleccionados, para mejorar no solo la eficiencia en costos sino también la satisfacción general del cliente.</li>
+</ul></li>
+<li><strong>Monitoreo y Ajuste Constante:</strong>
+<ul>
+<li>Establecer un sistema de monitoreo que permita ajustar el modelo en respuesta a cambios en el mercado o en las preferencias del consumidor. Esto garantiza que el modelo se mantenga relevante y efectivo a lo largo del tiempo.</li>
+</ul></li>
+<li><strong>Implementación de Herramientas de Visualización de Datos:</strong>
+<ul>
+<li>Desarrollar herramientas de visualización para que los usuarios puedan entender fácilmente los patrones y las recomendaciones del modelo. Esto puede mejorar la usabilidad y la aceptación del sistema.</li>
+</ul></li>
+<li><strong>Colaboración con Expertos del Sector:</strong>
+<ul>
+<li>Trabajar en colaboración con expertos en retail y análisis de mercado puede proporcionar perspectivas adicionales y ayudar a refinar el modelo para que sea más efectivo en escenarios reales.</li>
+</ul></li>
+<li><strong>Consideración de Aspectos Éticos y de Privacidad:</strong>
+<ul>
+<li>Asegurarse de que el modelo cumpla con las normativas de privacidad y ética, especialmente en lo que respecta a la recopilación y uso de datos de consumidores.</li>
+</ul></li>
+</ol>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
